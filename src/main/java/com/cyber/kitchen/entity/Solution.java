@@ -19,14 +19,12 @@ public class Solution {
     @Column(name = "id", nullable = false)
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "task_id")
     private Task task;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     private Team team;
-
 
     private State state;
 

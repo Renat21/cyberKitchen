@@ -22,7 +22,7 @@ public class TaskService {
     @Autowired
     SolutionService solutionService;
 
-    public String createNewTask(User organizer, Task task){
+    public String createNewTask(User organizer, Task task, List<Long> numerations){
         Event event = eventService.findEventOrganizer(organizer);
         List<Task> taskList = event.getTaskList();
         task.setNumeration((long) taskList.size());
@@ -31,6 +31,8 @@ public class TaskService {
         taskList.add(task);
         event.setTaskList(taskList);
         eventService.save(event);
+
+        changeNumerations(organizer, numerations);
         return "organizerDashboard";
     }
 

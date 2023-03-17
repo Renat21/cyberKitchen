@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MemberService {
@@ -25,25 +26,24 @@ public class MemberService {
     @Autowired
     EventService eventService;
 
-    public String memberEntranceEvent(User user, String token, String role, String teamName){
+    public String memberEntranceEvent(User user, String token){
         Event event = eventService.findEventByMemberToken(token);
         if (event == null)
             return "error404";
 
+        if (eventService.getUsersFromMembers(event.getMembers()).contains(user))
+            return "error404";
+
         Member member = new Member();
         member.setEntranceDate(LocalDateTime.now());
-        member.setRole(userService.getEventRole(role));
         member.setUser(userService.findUserById(user.getId()));
-        member.setTeamName(teamName);
         memberRepository.save(member);
 
         List<Member> members = event.getMembers();
         members.add(member);
         eventService.save(event);
-        return "memberDashboard";
+        return "redirect:/event/" + event.getId();
     }
-
-
 
 
 }

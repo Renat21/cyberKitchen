@@ -19,6 +19,8 @@ public class Event {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    private String name;
+
     @ManyToOne
     private User organizer;
 
@@ -33,8 +35,6 @@ public class Event {
     private String memberToken;
 
     private String expertToken;
-
-    private Long maxTeams;
 
     private Long maxMembersInTeam;
 

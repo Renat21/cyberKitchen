@@ -5,6 +5,8 @@ import com.cyber.kitchen.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface EventRepository  extends JpaRepository<Event, Long> {
     Event findEventById(Long id);
     Event findEventByExpertToken(String token);
@@ -12,4 +14,6 @@ public interface EventRepository  extends JpaRepository<Event, Long> {
     Event findEventByMemberToken(String token);
     @Query("select e from Event e where e.organizer = ?1 and e.running = true")
     Event findEventByOrganizer(User user);
+
+    List<Event> findEventsByOrganizer(User user);
 }

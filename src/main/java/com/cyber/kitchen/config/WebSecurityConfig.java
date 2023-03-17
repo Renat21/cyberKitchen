@@ -1,5 +1,6 @@
 package com.cyber.kitchen.config;
 
+import com.cyber.kitchen.enumer.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,8 +27,8 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers( "/registration").permitAll()
-                        .requestMatchers("/indexOrganizer").hasAnyRole("ORGANIZER", "ADMIN")
-                        .requestMatchers("/index").hasAnyRole("USER", "EXPERT", "AMDIN")
+                        .requestMatchers("/").hasAnyAuthority("USER", "EXPERT", "ORGANIZER", "ADMIN")
+                        .requestMatchers("/index").hasAnyAuthority("USER", "EXPERT" , "ORGANIZER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
