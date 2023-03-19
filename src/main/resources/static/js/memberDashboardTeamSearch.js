@@ -60,12 +60,20 @@ function defineTeamsByRole(){
 
 
 function enterToTeam(data){
-    let role = document.getElementById('yourRole').value;
-    currentRole = role
-    createAjaxQueryWithData("/event/member/enterTeam/" + data, null, {role: role})
+    createAjaxQueryWithData("/event/member/enterTeam", redirect, {teamId: data, role: currentRole})
+}
+
+function redirect(data) {
+    if (data) {
+        window.location.href = currentLocation + data;
+    } else {
+        // data.form contains the HTML for the replacement form
+        // $("#myform").replaceWith(data.form);
+    }
 }
 
 function createAjaxQueryWithData(url, toFunction, request) {
+    console.log(request)
     jQuery.ajax({
         type: 'POST',
         url: currentLocation + url,
@@ -79,7 +87,7 @@ function createAjaxQueryWithData(url, toFunction, request) {
 function createAjaxQuery(url, toFunction) {
     console.log(currentLocation + url);
     jQuery.ajax({
-        type: 'POST',
+        type: 'GET',
         url: currentLocation + url,
         contentType: 'application/json',
         success: toFunction

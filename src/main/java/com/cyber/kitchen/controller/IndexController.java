@@ -37,7 +37,7 @@ public class IndexController {
             Event event = userService.findUsersCurrentEvent(user);
             if (event != null){
                 model.addAttribute("event", event);
-                return "redirect:/event/member/" + event.getId();
+                return "redirect:/event/member/" + event.getId() + "/teamProfile";
             }
             return "indexMembers";
         }

@@ -40,6 +40,6 @@ public class TeamService {
         team.getMembers().add(member);
         teamRepository.save(team);
 
-        return "redirect:/event/member/" + event.getId();
+        return "/event/member/" + event.getId() + "/teamProfile";
     }
 }

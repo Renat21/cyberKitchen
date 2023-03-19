@@ -22,6 +22,9 @@ public class Team {
 
     private String name;
 
+    @OneToOne
+    private Member leader;
+
     @ManyToOne(cascade = CascadeType.MERGE)
     private Theme theme;
 

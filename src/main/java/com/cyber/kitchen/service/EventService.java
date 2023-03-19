@@ -70,6 +70,8 @@ public class EventService {
             Team team = getUsersTeamByEvent(event, user);
             model.addAttribute("event", event);
             if (team != null) {
+                model.addAttribute("member", memberRepository.findMemberByUser(user));
+                model.addAttribute("team", team);
                 return "memberDashboardTeamProfile";
             }
             return "memberDashboardTeamSearch";
@@ -172,12 +174,14 @@ public class EventService {
 
         member.setRole(userService.getEventRole(role));
         teamRepository.save(team);
+
+        team.setLeader(member);
         team.getMembers().add(member);
         teamRepository.save(team);
 
         event.getTeams().add(team);
         eventRepository.save(event);
-        return "redirect:/event/member/" + event.getId();
+        return "redirect:/event/member/" + event.getId() + "/teamProfile";
     }
 
     public List<Team> getTeams(User user, String role){
