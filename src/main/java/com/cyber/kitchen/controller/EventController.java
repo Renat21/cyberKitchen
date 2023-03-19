@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/event")
+@RequestMapping("/event/organizer")
 public class EventController {
 
     @Autowired
@@ -37,82 +37,19 @@ public class EventController {
     @Autowired
     ExpertService expertService;
 
-
-    // ОРГАНИЗАТОР
-
-    @GetMapping("/organizer/{eventId}/profile")
+    @GetMapping("/{eventId}/profile")
     public String getEventForOrganizerProfile(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
         return eventService.enterToEventOrganizer(user, eventId, model, 1);
     }
 
-    @GetMapping("/organizer/{eventId}/themes")
+    @GetMapping("/{eventId}/themes")
     public String getEventForOrganizerTheme(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
         return eventService.enterToEventOrganizer(user, eventId, model, 2);
     }
 
-    @PostMapping("/organizer/createTheme")
+    @PostMapping("/createTheme")
     public String createTheme(@AuthenticationPrincipal User user,
                               @ModelAttribute(name="theme") Theme theme){
         return themeService.createThemeForEvent(user, theme);
-    }
-
-
-
-
-
-    // УЧАСТНИК
-    @GetMapping("/member/{eventId}/teamProfile")
-    public String getEventForMember(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
-        return eventService.enterToEventMember(user, eventId, model);
-    }
-
-    @PostMapping("/member/enterTeam")
-    @ResponseBody
-    public String enterTeamMember(@AuthenticationPrincipal User user,
-                                  @RequestBody Map<String, String> json){
-        return teamService.enterToTeam(user, Long.parseLong(json.get("teamId")), json.get("role"));
-    }
-
-    @PostMapping("/member/createTeam")
-    public String createTeam(@AuthenticationPrincipal User user,
-                             @ModelAttribute(name = "team") Team team,
-                             @ModelAttribute(name = "role") String role,
-                             RedirectAttributes redirectAttributes){
-        return eventService.createTeam(user, team, role, redirectAttributes);
-    }
-
-    @PostMapping("/member/addToTeam")
-    public String addToTeam(@AuthenticationPrincipal User user,
-                             @ModelAttribute(name = "username") String username,
-                             @ModelAttribute(name = "role") String role,
-                             RedirectAttributes redirectAttributes){
-        return memberService.addToTeam(user, username, role, redirectAttributes);
-    }
-
-    @PostMapping("/member/getTeams")
-    @ResponseBody
-    public List<Team> getTeams(@AuthenticationPrincipal User user,
-                               @RequestBody Map<String, String> json){
-        return eventService.getTeams(user,  json.get("role"));
-    }
-
-    @PostMapping("/exitFromTeam")
-    public String exitFromTeam(@AuthenticationPrincipal User user, RedirectAttributes redirectAttributes){
-        return memberService.exitFromTeam(user,  redirectAttributes);
-    }
-
-
-
-
-
-    // ЭКСПЕРТ
-    @GetMapping("/expert/{eventId}/kanban")
-    public String getEventForExpert(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
-        return eventService.enterToEventExpert(user, eventId, model);
-    }
-
-    @PostMapping("/expertEntrance")
-    public String enterEvent(@AuthenticationPrincipal User user, @ModelAttribute(name = "token") String token){
-        return expertService.expertEntranceEvent(user, token);
     }
 }
