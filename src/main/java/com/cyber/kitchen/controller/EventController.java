@@ -3,10 +3,9 @@ package com.cyber.kitchen.controller;
 
 import com.cyber.kitchen.entity.Event;
 import com.cyber.kitchen.entity.Team;
+import com.cyber.kitchen.entity.Theme;
 import com.cyber.kitchen.entity.User;
-import com.cyber.kitchen.service.EventService;
-import com.cyber.kitchen.service.MemberService;
-import com.cyber.kitchen.service.TeamService;
+import com.cyber.kitchen.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
@@ -32,6 +31,12 @@ public class EventController {
     @Autowired
     MemberService memberService;
 
+    @Autowired
+    ThemeService themeService;
+
+    @Autowired
+    ExpertService expertService;
+
 
     // ОРГАНИЗАТОР
 
@@ -40,14 +45,15 @@ public class EventController {
         return eventService.enterToEventOrganizer(user, eventId, model, 1);
     }
 
-    @GetMapping("/organizer/{eventId}/theme")
+    @GetMapping("/organizer/{eventId}/themes")
     public String getEventForOrganizerTheme(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
         return eventService.enterToEventOrganizer(user, eventId, model, 2);
     }
 
-    @PostMapping("/organizer/createTask")
-    public String createTask(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
-        return eventService.enterToEventOrganizer(user, eventId, model, 1);
+    @PostMapping("/organizer/createTheme")
+    public String createTheme(@AuthenticationPrincipal User user,
+                              @ModelAttribute(name="theme") Theme theme){
+        return themeService.createThemeForEvent(user, theme);
     }
 
 
@@ -100,8 +106,13 @@ public class EventController {
 
 
     // ЭКСПЕРТ
-    @GetMapping("/expert/{eventId}")
+    @GetMapping("/expert/{eventId}/kanban")
     public String getEventForExpert(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
         return eventService.enterToEventExpert(user, eventId, model);
+    }
+
+    @PostMapping("/expertEntrance")
+    public String enterEvent(@AuthenticationPrincipal User user, @ModelAttribute(name = "token") String token){
+        return expertService.expertEntranceEvent(user, token);
     }
 }

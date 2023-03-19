@@ -25,6 +25,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Long findUsersCurrentEvent(Long userId);
 
     @Query(value = """
+                     select e.id from jpa.event as e, jpa.event_experts as ex\s
+                        where ex.event_id = e.id and ex.experts_id = ?1 and e.running = true;
+                        """, nativeQuery = true)
+    Long findExpertsCurrentEvent(Long userId);
+
+    @Query(value = """
                      select e.id from jpa.event as e, jpa.member as m, jpa.event_members as col\s
                         where col.event_id = e.id and col.members_id = m.id and m.user_id = 452;
                         """, nativeQuery = true)

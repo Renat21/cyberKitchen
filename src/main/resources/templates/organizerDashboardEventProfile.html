@@ -26,8 +26,8 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto sidenav" id="navAccordion">
             <ul class="metro">
-                <li><a href="" style="color: #cccccc">Профиль события</a></li>
-                <li><a href="" style="color: #cccccc">Темы конкурса</a></li>
+                <li><a th:href="@{/event/organizer/{id}/profile(id=${event.id})}" style="color: #cccccc">Профиль события</a></li>
+                <li><a th:href="@{/event/organizer/{id}/themes(id=${event.id})}" style="color: #cccccc">Темы конкурса</a></li>
                 <li><a href="" style="color: #cccccc">Команды</a></li>
                 <li><a href="" style="color: #cccccc">Участники</a></li>
                 <li><a href="" style="color: #cccccc">Эксперты</a></li>
@@ -93,6 +93,15 @@
                             </div>
                             <div class="col-md-6">
                                 <p th:text="${event.expertToken}"></p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Даты события</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:inline="text">[[${event.startDate}]] - [[${event.endDate}]]</p>
                             </div>
                         </div>
                     </div>

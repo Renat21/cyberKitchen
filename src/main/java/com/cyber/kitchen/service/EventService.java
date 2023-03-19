@@ -90,7 +90,8 @@ public class EventService {
             return "error404";
 
         if (event.getExperts().contains(user)){
-            return "expertDashboard";
+            model.addAttribute("event", event);
+            return "expertDashboardEventKanban";
         }
         return "error404";
     }
@@ -107,12 +108,10 @@ public class EventService {
 
         if (event.getOrganizer().equals(user)){
             model.addAttribute("event", event);
-            switch (page) {
-                case 1:
-                    return "organizerDashboardEventProfile";
-                case 2:
-                    return "organizerDashboardEventThemes";
-
+            if (page == 1)
+                return "organizerDashboardEventProfile";
+            else if (page == 2) {
+                return "organizerDashboardEventThemes";
             }
         }
         return "error404";

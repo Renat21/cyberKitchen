@@ -2,10 +2,12 @@ package com.cyber.kitchen.service;
 
 
 import com.cyber.kitchen.entity.Event;
+import com.cyber.kitchen.entity.Member;
 import com.cyber.kitchen.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,7 +26,7 @@ public class ExpertService {
         List<User> experts = event.getExperts();
         experts.add(userService.findUserById(user.getId()));
         eventService.save(event);
-        return "expertDashboard";
+        return "redirect:/event/expert/" + event.getId() + "/kanban";
     }
 
 }

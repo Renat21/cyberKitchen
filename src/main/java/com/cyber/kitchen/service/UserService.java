@@ -94,6 +94,10 @@ public class UserService implements UserDetailsService {
         return eventRepository.findEventById(userRepository.findUsersCurrentEvent(user.getId()));
     }
 
+    public Event findExpertsCurrentEvent(User user){
+        return eventRepository.findEventById(userRepository.findExpertsCurrentEvent(user.getId()));
+    }
+
     public Event findUsersEvents(User user){
         return eventRepository.findEventById(userRepository.findUsersEvents(user));
     }

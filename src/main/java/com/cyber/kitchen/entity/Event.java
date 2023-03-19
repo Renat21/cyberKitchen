@@ -52,6 +52,6 @@ public class Event {
     private List<Task> taskList = new ArrayList<>();
 
     @OneToMany
-    private List<Task> themes = new ArrayList<>();
+    private List<Theme> themes = new ArrayList<>();
 
 }

@@ -40,6 +40,13 @@ public class IndexController {
                 return "redirect:/event/member/" + event.getId() + "/teamProfile";
             }
             return "indexMembers";
+        } else if (user.getRoles().contains(Role.EXPERT)){
+            Event event = userService.findExpertsCurrentEvent(user);
+            if (event != null){
+                model.addAttribute("event", event);
+                return "redirect:/event/expert/" + event.getId() + "/kanban";
+            }
+            return "indexExperts";
         }
         return "index";
     }
