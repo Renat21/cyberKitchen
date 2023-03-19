@@ -40,6 +40,7 @@ public class MemberController {
         return memberService.memberEntranceEvent(user, token);
     }
 
+
     @GetMapping("/{eventId}/teamProfile")
     public String getEventForMember(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
         return eventService.enterToEventMember(user, eventId, model);
