@@ -5,9 +5,12 @@ import com.cyber.kitchen.entity.Event;
 import com.cyber.kitchen.entity.Member;
 import com.cyber.kitchen.entity.Team;
 import com.cyber.kitchen.entity.User;
+import com.cyber.kitchen.enumer.EventRole;
+import com.cyber.kitchen.repository.MemberRepository;
 import com.cyber.kitchen.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Comparator;
 import java.util.List;
@@ -18,10 +21,25 @@ public class TeamService {
     @Autowired
     TeamRepository teamRepository;
 
-    public void createTeams(Event event){
-        List<Member> memberList = event.getMembers().stream().sorted(Comparator.comparing(Member::getEntranceDate)).toList();
+    @Autowired
+    MemberRepository memberRepository;
 
-        Team team = new Team();
+    @Autowired
+    UserService userService;
 
+    public String enterToTeam(User user, Long teamId, String role){
+        Event event = userService.findUsersCurrentEvent(user);
+        EventRole eventRole = userService.getEventRole(role);
+        Member member = memberRepository.findMemberByUser(user);
+
+        member.setRole(eventRole);
+        memberRepository.save(member);
+
+        Team team = teamRepository.findTeamById(teamId);
+
+        team.getMembers().add(member);
+        teamRepository.save(team);
+
+        return "redirect:/event/member/" + event.getId();
     }
 }

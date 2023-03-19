@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,15 +40,18 @@ public class Event {
     private Long maxMembersInTeam;
 
     @OneToMany(cascade = CascadeType.MERGE)
-    private List<User> experts;
+    private List<User> experts = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.MERGE)
-    private List<Member> members;
+    private List<Member> members = new ArrayList<>();
 
     @OneToMany
-    private List<Team> teams;
+    private List<Team> teams = new ArrayList<>();
 
     @OneToMany
-    private List<Task> taskList;
+    private List<Task> taskList = new ArrayList<>();
+
+    @OneToMany
+    private List<Task> themes = new ArrayList<>();
 
 }

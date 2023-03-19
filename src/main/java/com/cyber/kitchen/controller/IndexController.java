@@ -4,6 +4,7 @@ import com.cyber.kitchen.entity.Event;
 import com.cyber.kitchen.entity.User;
 import com.cyber.kitchen.enumer.Role;
 import com.cyber.kitchen.service.EventService;
+import com.cyber.kitchen.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,9 @@ public class IndexController {
     @Autowired
     EventService eventService;
 
+    @Autowired
+    UserService userService;
+
 
     @GetMapping("/")
     public String getIndex(@AuthenticationPrincipal User user, Model model){
@@ -30,7 +34,11 @@ public class IndexController {
             model.addAttribute("events", eventService.findEventsByOrganizer(user));
             return "indexOrganizers";
         } else if (user.getRoles().contains(Role.USER)) {
-            model.addAttribute("events", eventService.findEventsByOrganizer(user));
+            Event event = userService.findUsersCurrentEvent(user);
+            if (event != null){
+                model.addAttribute("event", event);
+                return "redirect:/event/member/" + event.getId();
+            }
             return "indexMembers";
         }
         return "index";

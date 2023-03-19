@@ -1,8 +1,10 @@
 package com.cyber.kitchen.service;
 
+import com.cyber.kitchen.entity.Event;
 import com.cyber.kitchen.entity.User;
 import com.cyber.kitchen.enumer.EventRole;
 import com.cyber.kitchen.enumer.Role;
+import com.cyber.kitchen.repository.EventRepository;
 import com.cyber.kitchen.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -28,6 +31,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    EventRepository eventRepository;
 
 //    @Autowired
 //    ImageService imageService;
@@ -83,6 +89,15 @@ public class UserService implements UserDetailsService {
             return EventRole.MANAGER;
         return EventRole.DEVELOPER;
     }
+
+    public Event findUsersCurrentEvent(User user){
+        return eventRepository.findEventById(userRepository.findUsersCurrentEvent(user.getId()));
+    }
+
+    public Event findUsersEvents(User user){
+        return eventRepository.findEventById(userRepository.findUsersEvents(user));
+    }
+
 
     public String changeProfile(RedirectAttributes redirectAttributes, User user,
                                 String username, String name, String surname) {

@@ -1,0 +1,138 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding-top: 4.5rem;
+    margin-bottom: 4.5rem;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 3.5rem;
+    line-height: 3.5rem;
+    background-color: #ccc;
+}
+
+.nav-link:hover {
+    transition: all 0.4s;
+}
+
+.nav-link-collapse:after {
+    float: right;
+    content: '\f067';
+    font-family: 'FontAwesome';
+}
+
+.nav-link-show:after {
+    float: right;
+    content: '\f068';
+    font-family: 'FontAwesome';
+}
+
+.nav-item ul.nav-second-level {
+    padding-left: 0;
+}
+
+.nav-item ul.nav-second-level > .nav-item {
+    padding-left: 20px;
+}
+
+@media (min-width: 992px) {
+    .sidenav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 230px;
+        height: calc(100vh - 3.5rem);
+        margin-top: 3.5rem;
+        background: #343a40;
+        box-sizing: border-box;
+        border-top: 1px solid rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar-expand-lg .sidenav {
+        flex-direction: column;
+    }
+
+    .content-wrapper {
+        margin-left: 230px;
+    }
+
+    .footer {
+        width: calc(100% - 230px);
+        margin-left: 230px;
+    }
+}
+
+.metro {
+    list-style: none;
+    padding: 0;
+    margin: 30px 0 0 50px;
+    border-left: 5px solid #DAE4F1;
+}
+.metro li {line-height: 2em;}
+.metro ul {
+    margin: 20px 0 20px 15px;
+    padding: 0;
+    border: none;
+    list-style: none;
+}
+.metro ul:before, .metro ul:after {
+    content: "";
+    width: 5px;
+    height: 28px;
+    background: #DAE4F1;
+    position: relative;
+    display: block;
+    left: -9px;
+}
+.metro ul:before {
+    transform: rotate(-45deg);
+    margin-top: -15px;
+}
+.metro ul:after {
+    transform: rotate(45deg);
+    bottom: -20px;
+}
+.metro ul li {border-left: 5px solid #DAE4F1;}
+.metro ul li:first-child {
+    margin-top: -5px;
+    padding-top: 5px;
+}
+.metro ul li:last-child {
+    padding-bottom: 9px;
+    margin-bottom: -25px;
+}
+.metro a {
+    text-decoration: none;
+    display: block;
+    font-family: 'Noto Sans', sans-serif;
+    color: #4A4B4D;
+}
+.metro a:before {
+    content: "";
+    display: inline-block;
+    background: #CA682D;
+    width: 12px;
+    height: 12px;
+    left: -9px;
+    position: relative;
+    border-radius: 50%;
+    margin-right: .5em;
+}
+
+.plus {
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    color: #606062;
+    width: 100px;
+    height: 100px;
+    font: 60px/1 Arial,sans-serif;
+    text-align: center;
+    border-radius: 50%;
+}

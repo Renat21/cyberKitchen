@@ -12,12 +12,14 @@
 <body>
 <div>
     <header>
-
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
     </header>
-    <div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Создать event</button>
-    </div>
     <div class=container>
+        <div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Создать event</button>
+        </div>
         <div style="width: 400px">
             <ol class="list-group list-group-numbered" th:each="event : ${events}">
                 <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -25,7 +27,7 @@
                         <div th:text="${event.name}" class="fw-bold">Subheading</div>
                         Cras justo odio
                     </div>
-                    <a th:if="${event.running}" th:href="@{/event/{id}(id=${event.id})}">Событие идет</a>
+                    <a th:if="${event.running}" th:href="@{/event/organizer/{id}/profile(id=${event.id})}">Событие идет</a>
                     <div th:if="${not event.running}">Событие закончилось</div>
                 </li>
             </ol>

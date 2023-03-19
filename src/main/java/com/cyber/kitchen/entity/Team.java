@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,5 +31,5 @@ public class Team {
             joinColumns = {@JoinColumn(name="team_id")},
             inverseJoinColumns = {@JoinColumn(name="member_id")}
     )
-    private List<Member> members;
+    private List<Member> members = new ArrayList<>();
 }

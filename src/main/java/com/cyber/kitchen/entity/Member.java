@@ -21,7 +21,7 @@ public class Member {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
     @JsonFormat(pattern="dd/MM/yyyy HH:mm:ss")

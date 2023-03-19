@@ -42,7 +42,7 @@ public class MemberService {
         List<Member> members = event.getMembers();
         members.add(member);
         eventService.save(event);
-        return "redirect:/event/" + event.getId();
+        return "redirect:/event/member/" + event.getId();
     }
 
 
