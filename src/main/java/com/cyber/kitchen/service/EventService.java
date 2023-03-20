@@ -1,10 +1,7 @@
 package com.cyber.kitchen.service;
 
 
-import com.cyber.kitchen.entity.Event;
-import com.cyber.kitchen.entity.Member;
-import com.cyber.kitchen.entity.Team;
-import com.cyber.kitchen.entity.User;
+import com.cyber.kitchen.entity.*;
 import com.cyber.kitchen.enumer.EventRole;
 import com.cyber.kitchen.enumer.Role;
 import com.cyber.kitchen.repository.EventRepository;
@@ -35,9 +32,6 @@ public class EventService {
     @Autowired
     MemberRepository memberRepository;
 
-//    @Autowired
-//    TaskService taskService;
-
     @Autowired
     TeamService teamService;
 
@@ -65,6 +59,7 @@ public class EventService {
 
         if (!event.getRunning())
             return "error404";
+
 
         if (getUsersFromMembers(event.getMembers()).contains(user)){
             Team team = getUsersTeamByEvent(event, user);
@@ -108,10 +103,23 @@ public class EventService {
 
         if (event.getOrganizer().equals(user)){
             model.addAttribute("event", event);
+            model.addAttribute("taskList", event.getTaskList().stream().sorted(Comparator.comparing(Task::getNumeration)).collect(Collectors.toList()));
             if (page == 1)
                 return "organizerDashboardEventProfile";
             else if (page == 2) {
                 return "organizerDashboardEventThemes";
+            }
+            else if (page == 3) {
+                return "organizerDashboardEventTasks";
+            }
+            else if (page == 4) {
+                return "organizerDashboardEventMembers";
+            }
+            else if (page == 5) {
+                return "organizerDashboardEventExperts";
+            }
+            else if (page == 6) {
+                return "organizerDashboardEventTeams";
             }
         }
         return "error404";

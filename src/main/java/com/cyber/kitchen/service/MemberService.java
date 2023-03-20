@@ -67,6 +67,9 @@ public class MemberService {
         Team team = teamRepository.findTeamById(teamRepository.findTeamByMember(member.getId()));
         team.getMembers().remove(member);
 
+        member.setTeamName(null);
+        memberRepository.save(member);
+
         if (team.getMembers().size() > 0){
             team.setLeader(team.getMembers().get(0));
         }

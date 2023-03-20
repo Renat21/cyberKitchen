@@ -33,4 +33,28 @@ public class ThemeService {
 
         return "redirect:/event/organizer/" + event.getId() + "/themes";
     }
+
+    public String deleteThemeForEvent(User user, Long themeId){
+        Theme theme = themeRepository.findThemeById(themeId);
+        Event event = eventService.findEventOrganizer(user);
+
+        event.getThemes().remove(theme);
+        eventRepository.save(event);
+
+        themeRepository.delete(theme);
+
+        return "redirect:/event/organizer/" + event.getId() + "/themes";
+    }
+
+    public String updateThemeForEvent(User user, Long themeId, Theme newTheme){
+        Theme theme = themeRepository.findThemeById(themeId);
+        Event event = eventService.findEventOrganizer(user);
+
+
+        theme.setDescription(newTheme.getDescription());
+        theme.setName(newTheme.getName());
+        themeRepository.delete(theme);
+
+        return "redirect:/event/organizer/" + event.getId() + "/themes";
+    }
 }

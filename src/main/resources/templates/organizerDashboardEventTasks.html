@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/memberDashboardTeamProfile.css">
+    <link rel="stylesheet" href="/css/organizerDashboardEventTasks.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <title>CyberKitchen</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#">Sidebar Nav</a>
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarCollapse"
+            aria-controls="navbarCollapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto sidenav" id="navAccordion">
+            <ul class="metro">
+                <li><a th:href="@{/event/organizer/{id}/profile(id=${event.id})}" style="color: #cccccc">Профиль события</a></li>
+                <li><a th:href="@{/event/organizer/{id}/themes(id=${event.id})}" style="color: #cccccc">Темы конкурса</a></li>
+                <li><a th:href="@{/event/organizer/{id}/teams(id=${event.id})}" style="color: #cccccc">Команды</a></li>
+                <li><a th:href="@{/event/organizer/{id}/members(id=${event.id})}" style="color: #cccccc">Участники</a></li>
+                <li><a th:href="@{/event/organizer/{id}/experts(id=${event.id})}" style="color: #cccccc">Эксперты</a></li>
+                <li><a th:href="@{/event/organizer/{id}/tasks(id=${event.id})}" style="color: #cccccc">Задания</a></li>
+            </ul>
+        </ul>
+        <form class="form-inline ml-auto mt-2 mt-md-0" th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
+</nav>
+
+<main class="content-wrapper">
+    <div class="container-fluid">
+        <div style="width: 95%;">
+            <div class="container">
+                <h2>Чекпоинты конкурса</h2>
+                <p>Информация о чекпоинтах:</p>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <table class="table table-hover" id="myTable">
+                            <thead>
+                            <tr>
+                                <th scope="col" class="text-center">#</th>
+                                <th scope="col">Название</th>
+                                <th scope="col">Описание</th>
+                                <th scope="col">Баллы</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="tableTasks">
+                            <tr class="tasks" data-toggle="modal" data-target="#updateCheckpoint" th:each="task: ${taskList}" th:id="${task.id}">
+                                <td th:text="${task.numeration}" class="index value"></td>
+                                <td th:text="${task.name}" class="value"></td>
+                                <td th:text="${task.description}" class="value"></td>
+                                <td th:text="${task.maxScore}" class="value"></td>
+                                <td>
+                                    <a th:href="@{/event/organizer/deleteTask/{id}(id=${task.id})}">Удалить</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-info" id="defineNumeration">Сохранить нумерацию</button>
+                    </div>
+                    <div class="col-sm-3" style="padding-left: 20px">
+                        <button data-toggle="modal" class="btn btn-success" data-target="#exampleModal">Добавить чекпоинт</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Создать чекпоинт</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/event/organizer/createTask}" method="post" th:object="${task}">
+                    <div class="form-group">
+                        <label for="name" class="col-form-label">Название чекпоинта:</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description" class="col-form-label">Описание:</label>
+                        <textarea class="form-control" name="description" id="description"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxScore" class="col-form-label">Максимальное количество баллов:</label>
+                        <input type="text" class="form-control" id="maxScore" name="maxScore">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Создать тему</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="updateCheckpoint" tabindex="-1" role="dialog" aria-labelledby="exampleModalL" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalL">Изменить чекпоинт</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changeForm" method="post" th:object="${task}">
+                    <div class="form-group">
+                        <label for="nameChange" class="col-form-label">Название чекпоинта:</label>
+                        <input type="text" class="form-control" id="nameChange" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descriptionChange" class="col-form-label">Описание:</label>
+                        <textarea class="form-control" name="description" id="descriptionChange"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maxScoreChange" class="col-form-label">Максимальное количество баллов:</label>
+                        <input type="text" class="form-control" id="maxScoreChange" name="maxScore">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Изменить тему</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script >
+    $('#exampleModal').on('show.bs.modal', function (event) {
+    })
+</script>
+
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+<script src="/js/organizerDashboardEventTasks.js"></script>
+</body>
+</html>

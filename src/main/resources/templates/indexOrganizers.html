@@ -44,7 +44,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/createEvent}" method="post" th:object="${event}">
+                <form th:action="@{/event/organizer/createEvent}" method="post" th:object="${event}">
                     <div class="form-group">
                         <label for="name" class="col-form-label">Название eventa:</label>
                         <input type="text" class="form-control" id="name" name="name">

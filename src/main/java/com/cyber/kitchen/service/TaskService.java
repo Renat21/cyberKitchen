@@ -3,12 +3,14 @@ package com.cyber.kitchen.service;
 
 import com.cyber.kitchen.entity.*;
 import com.cyber.kitchen.enumer.State;
+import com.cyber.kitchen.repository.EventRepository;
 import com.cyber.kitchen.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,40 +24,67 @@ public class TaskService {
     @Autowired
     SolutionService solutionService;
 
-    public String createNewTask(User organizer, Task task, List<Long> numerations){
+    @Autowired
+    EventRepository eventRepository;
+
+    public String createNewTask(User organizer, Task task){
         Event event = eventService.findEventOrganizer(organizer);
         List<Task> taskList = event.getTaskList();
-        task.setNumeration((long) taskList.size());
+        task.setNumeration((long) taskList.size() + 1);
         taskRepository.save(task);
 
         taskList.add(task);
         event.setTaskList(taskList);
         eventService.save(event);
-
-        changeNumerations(organizer, numerations);
-        return "organizerDashboard";
+        return "redirect:/event/organizer/" + event.getId() + "/tasks";
     }
 
-    public String changeTask(User organizer, Long taskId, Task newTask, List<Long> numerations){
+    public String changeTask(User organizer, Task newTask, Long taskId){
+        Event event = eventService.findEventOrganizer(organizer);
+
         Task task = taskRepository.findTaskById(taskId);
         task.setDescription(newTask.getDescription());
         task.setName(newTask.getName());
         task.setMaxScore(newTask.getMaxScore());
-        task.setStartDate(newTask.getStartDate());
-        task.setEndDate(newTask.getEndDate());
         taskRepository.save(task);
 
-        changeNumerations(organizer, numerations);
-        return "organizerDashboard";
+        return "redirect:/event/organizer/" + event.getId() + "/tasks";
     }
 
-    public void changeNumerations(User organizer, List<Long> numerations){
+    public String changeNumerations(User organizer, Map<Long, Long> numerations){
         Event event = eventService.findEventOrganizer(organizer);
         List<Task> taskList = event.getTaskList();
+
         for (Task task : taskList) {
-            task.setNumeration(numerations.get(numerations.indexOf(task.getId())));
+            task.setNumeration(numerations.get(task.getId()) + 1);
             taskRepository.save(task);
         }
+
+        return "success";
+    }
+
+    public void updateNumeration(List<Task> taskList){
+        for (Task task: taskList){
+            task.setNumeration(taskList.indexOf(task) + 1L);
+            taskRepository.save(task);
+        }
+    }
+
+    public String deleteTaskForEvent(User user, Long taskId){
+        Event event = eventService.findEventOrganizer(user);
+        Task task = taskRepository.findTaskById(taskId);
+
+        if (task != null){
+            event.getTaskList().remove(task);
+            eventRepository.save(event);
+            taskRepository.delete(task);
+
+            updateNumeration(getAllTasksSorted(user));
+
+            return "redirect:/event/organizer/" + event.getId() + "/tasks";
+        }
+
+        return "error404";
     }
 
     public List<Task> getAllTasks(User organizer){

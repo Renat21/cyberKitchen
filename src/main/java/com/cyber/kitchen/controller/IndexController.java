@@ -51,13 +51,6 @@ public class IndexController {
         return "index";
     }
 
-    @PostMapping("/createEvent")
-    public String createEvent(@AuthenticationPrincipal User user,
-                              @ModelAttribute(name = "event") Event event,
-                              RedirectAttributes redirectAttributes){
-        return eventService.createEvent(user, event, redirectAttributes);
-    }
-
     @PostMapping("/changeEvent/{eventId}")
     public String changeEvent(@AuthenticationPrincipal User user,
                               @ModelAttribute(name = "event") Event event,

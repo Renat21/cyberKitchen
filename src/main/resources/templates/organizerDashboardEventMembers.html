@@ -44,31 +44,30 @@
     <div class="container-fluid">
         <div style="width: 95%;">
             <div class="container">
-                <h2>Темы конкурса</h2>
-                <p>Информация о темах:</p>
+                <h2>Участники</h2>
+                <p>Информация об участниках:</p>
                 <div class="row">
                     <div class="col-lg-9">
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Название</th>
-                                <th>Описание</th>
-                                <th></th>
+                                <th>Команда</th>
+                                <th>Имя</th>
+                                <th>Email</th>
+                                <th>Роль</th>
+                                <th>Дата входа</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="theme : ${event.themes}">
-                                <td th:text="${theme.name}"></td>
-                                <td th:text="${theme.description}"></td>
-                                <td>
-                                    <a th:href="@{/event/organizer/deleteTheme/{id}(id=${theme.id})}">Удалить</a>
-                                </td>
+                            <tr th:each="member : ${event.members}">
+                                <td th:text="${member.teamName}"></td>
+                                <td th:text="${member.user.username}"></td>
+                                <td th:text="${member.user.email}"></td>
+                                <td th:text="${member.role}"></td>
+                                <td th:text="${member.entranceDate}"></td>
                             </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <div class="col-sm-3" style="padding-left: 20px">
-                        <button data-toggle="modal" class="btn btn-success" data-target="#exampleModal">Добавить тему</button>
                     </div>
                 </div>
             </div>
@@ -76,42 +75,6 @@
 
     </div>
 </main>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form th:action="@{/event/organizer/createTheme}" method="post" th:object="${theme}">
-                    <div class="form-group">
-                        <label for="name" class="col-form-label">Название темы:</label>
-                        <input type="text" class="form-control" id="name" name="name">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description" class="col-form-label">Описание:</label>
-                        <textarea class="form-control" name="description" id="description"></textarea>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Создать тему</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script >
-    $('#exampleModal').on('show.bs.modal', function (event) {
-    })
-</script>
 
 </body>
 </html>
