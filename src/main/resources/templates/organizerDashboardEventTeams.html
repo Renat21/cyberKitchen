@@ -60,7 +60,8 @@
                             <tbody>
                             <tr th:each="team : ${event.teams}">
                                 <td th:text="${team.name}"></td>
-                                <td th:text="${team.theme}"></td>
+                                <td th:if="${team.theme != null}" th:text="${team.theme.name}"></td>
+                                <td th:if="${team.theme == null}">Тема не выбрана</td>
                                 <td th:text="${team.leader.user.username}"></td>
                                 <td th:text="${team.members.size()}"></td>
                             </tr>

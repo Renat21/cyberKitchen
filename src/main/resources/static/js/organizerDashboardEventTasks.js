@@ -50,7 +50,6 @@ function redirect(data) {
 }
 
 function createAjaxQueryWithData(url, toFunction, request) {
-    console.log(request)
     jQuery.ajax({
         type: 'POST',
         url: currentLocation + url,

@@ -2,12 +2,16 @@ package com.cyber.kitchen.service;
 
 
 import com.cyber.kitchen.entity.Event;
+import com.cyber.kitchen.entity.Team;
 import com.cyber.kitchen.entity.Theme;
 import com.cyber.kitchen.entity.User;
 import com.cyber.kitchen.repository.EventRepository;
+import com.cyber.kitchen.repository.TeamRepository;
 import com.cyber.kitchen.repository.ThemeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 public class ThemeService {
@@ -23,6 +27,9 @@ public class ThemeService {
 
     @Autowired
     ThemeRepository themeRepository;
+
+    @Autowired
+    TeamRepository teamRepository;
 
     public String createThemeForEvent(User user, Theme theme){
         Event event = eventService.findEventOrganizer(user);
@@ -56,5 +63,21 @@ public class ThemeService {
         themeRepository.delete(theme);
 
         return "redirect:/event/organizer/" + event.getId() + "/themes";
+    }
+
+    public Theme getThemeById(Long id){
+        return themeRepository.findThemeById(id);
+    }
+
+    public String selectTheme(User user, Long themeId){
+        Event event = userService.findUsersCurrentEvent(user);
+        Team team = eventService.getUsersTeamByEvent(event, user);
+        if (Objects.equals(team.getLeader().getUser().getId(), user.getId())){
+            Theme theme = themeRepository.findThemeById(themeId);
+            team.setTheme(theme);
+            teamRepository.save(team);
+            return "redirect:/event/member/" + event.getId() + "/teamTheme";
+        }
+        return "error404";
     }
 }

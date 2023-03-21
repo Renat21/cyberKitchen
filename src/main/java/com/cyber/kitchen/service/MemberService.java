@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -49,6 +50,10 @@ public class MemberService {
 
         if (eventService.getUsersFromMembers(event.getMembers()).contains(user))
             return "error404";
+
+        if (LocalDateTime.now().isAfter(event.getStartDate())){
+            return "error404";
+        }
 
         Member member = new Member();
         member.setEntranceDate(LocalDateTime.now());

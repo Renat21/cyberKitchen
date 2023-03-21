@@ -50,7 +50,7 @@ public class EventService {
         return "indexOrganizers";
     }
 
-    public String enterToEventMember(User user, Long eventId, Model model){
+    public String enterToEventMember(User user, Long eventId, Model model, int page){
         Event event = eventRepository.findEventById(eventId);
         user = userService.findUserById(user.getId());
 
@@ -64,14 +64,72 @@ public class EventService {
         if (getUsersFromMembers(event.getMembers()).contains(user)){
             Team team = getUsersTeamByEvent(event, user);
             model.addAttribute("event", event);
-            if (team != null) {
-                model.addAttribute("member", memberRepository.findMemberByUser(user));
-                model.addAttribute("team", team);
-                return "memberDashboardTeamProfile";
+            model.addAttribute("member", memberRepository.findMemberByUser(user));
+
+            if (checkTeamForFits(event, memberRepository.findMemberByUser(user))){
+                return "redirect:/";
             }
-            return "memberDashboardTeamSearch";
+
+            if (page == 1) {
+                if (team == null){
+                    return "memberDashboardTeamSearch";
+                }
+                else {
+                    if (LocalDateTime.now().isAfter(event.getStartDate()))
+                        model.addAttribute("eventStarted", true);
+                    model.addAttribute("team", team);
+                    return "memberDashboardTeamProfile";
+                }
+            }
+            else if (page == 2){
+                if (LocalDateTime.now().isAfter(event.getStartDate())){
+                    if (team.getTheme() != null)
+                        model.addAttribute("themeIsSelected", true);
+                    model.addAttribute("team", team);
+                    return "memberDashboardTeamTheme";
+                }else {
+                    return "redirect:/event/member/" + event.getId() + "/teamProfile";
+                }
+            }else if (page == 3){
+                return "memberDashboardKanban";
+            }
+
+//            if (team != null) {
+//                if (LocalDateTime.now().isAfter(event.getStartDate())) {
+//                    if (team.getTheme() != null)
+//                        return "memberDashboardTeamKanban";
+//                    else
+//                        return "memberDashboardTeamTheme";
+//                }
+//                model.addAttribute("member", memberRepository.findMemberByUser(user));
+//                model.addAttribute("team", team);
+//                return "memberDashboardTeamProfile";
+//            }
+//            return "memberDashboardTeamSearch";
         }
         return "error404";
+    }
+
+    public Boolean checkTeamForFits(Event event, Member member){
+        if (LocalDateTime.now().isAfter(event.getStartDate())){
+            Long teamId = teamRepository.findTeamByMember(member.getId());
+            if (teamId != null){
+                Team team = teamRepository.findTeamById(teamId);
+                if (team.getMembers().size() == event.getMaxMembersInTeam())
+                    return Boolean.FALSE;
+                for (Member memberOne: team.getMembers()){
+                    team.getMembers().remove(memberOne);
+                    event.getMembers().remove(memberOne);
+                    eventRepository.save(event);
+                    teamRepository.save(team);
+                }
+            }else {
+                event.getMembers().remove(member);
+                eventRepository.save(event);
+            }
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
     public String enterToEventExpert(User user, Long eventId, Model model){
