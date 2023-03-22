@@ -31,6 +31,12 @@ public class ThemeService {
     @Autowired
     TeamRepository teamRepository;
 
+    @Autowired
+    TaskService taskService;
+
+    @Autowired
+    ExpertService expertService;
+
     public String createThemeForEvent(User user, Theme theme){
         Event event = eventService.findEventOrganizer(user);
         themeRepository.save(theme);
@@ -76,6 +82,9 @@ public class ThemeService {
             Theme theme = themeRepository.findThemeById(themeId);
             team.setTheme(theme);
             teamRepository.save(team);
+
+            expertService.selectExpertFreeForTeam(event, team);
+            taskService.openTaskForTeam(team, event);
             return "redirect:/event/member/" + event.getId() + "/teamTheme";
         }
         return "error404";

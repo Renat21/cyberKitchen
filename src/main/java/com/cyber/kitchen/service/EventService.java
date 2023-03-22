@@ -35,6 +35,11 @@ public class EventService {
     @Autowired
     TeamService teamService;
 
+
+    @Autowired
+    SolutionService solutionService;
+
+
     public String createEvent(User user, Event event, RedirectAttributes redirectAttributes){
         if (!user.getRoles().contains(Role.ORGANIZER))
             return "error404";
@@ -91,21 +96,16 @@ public class EventService {
                     return "redirect:/event/member/" + event.getId() + "/teamProfile";
                 }
             }else if (page == 3){
-                return "memberDashboardKanban";
+                if (LocalDateTime.now().isAfter(event.getStartDate()) && team != null && team.getTheme() != null) {
+                    model.addAttribute("team", team);
+                    model.addAttribute("tasks", event.getTaskList().stream().sorted(Comparator.comparing(Task::getNumeration)).collect(Collectors.toList()));
+                    model.addAttribute("solutions", solutionService.getSolutionsByTeam(team));
+                    return "memberDashboardEventKanban";
+                }else {
+                    return "redirect:/event/member/" + event.getId() + "/teamProfile";
+                }
             }
 
-//            if (team != null) {
-//                if (LocalDateTime.now().isAfter(event.getStartDate())) {
-//                    if (team.getTheme() != null)
-//                        return "memberDashboardTeamKanban";
-//                    else
-//                        return "memberDashboardTeamTheme";
-//                }
-//                model.addAttribute("member", memberRepository.findMemberByUser(user));
-//                model.addAttribute("team", team);
-//                return "memberDashboardTeamProfile";
-//            }
-//            return "memberDashboardTeamSearch";
         }
         return "error404";
     }

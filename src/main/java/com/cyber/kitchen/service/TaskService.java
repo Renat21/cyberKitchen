@@ -95,17 +95,12 @@ public class TaskService {
         return eventService.findEventOrganizer(organizer).getTaskList().stream().sorted(Comparator.comparing(Task::getNumeration)).collect(Collectors.toList());
     }
 
-    public void openTaskForAllTeams(User organizer){
-        Event event = eventService.findEventOrganizer(organizer);
-        for (Team team: event.getTeams())
-            openTaskForTeam(team, event);
-    }
 
     public void openTaskForTeam(Team team, Event event){
         Solution solution = new Solution();
         solution.setCurScore(0L);
         solution.setTask(getAllTasksSorted(event.getOrganizer()).get(solutionService.getSolutionsByTeam(team).size()));
-        solution.setState(State.STARTED);
+        solution.setState(State.NOT_STARTED);
         solution.setTeam(team);
         solutionService.save(solution);
     }

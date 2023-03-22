@@ -98,6 +98,12 @@ public class MemberController {
         return themeService.selectTheme(user, themeId);
     }
 
+
+    @GetMapping("/{eventId}/kanban")
+    public String getEventForMemberKanban(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
+        return eventService.enterToEventMember(user, eventId, model, 3);
+    }
+
 //    @GetMapping("/{eventId}/teamProfile/teamTheme")
 //    public String getEventForMember(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
 //        return eventService.enterToEventMember(user, eventId, model);

@@ -35,4 +35,8 @@ public class Team {
             inverseJoinColumns = {@JoinColumn(name="member_id")}
     )
     private List<Member> members = new ArrayList<>();
+
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private User expert;
 }

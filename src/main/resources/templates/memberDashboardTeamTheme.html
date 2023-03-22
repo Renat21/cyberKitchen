@@ -29,7 +29,7 @@
             <ul class="metro">
                 <li><a th:href="@{/event/member/{id}/teamProfile(id=${event.id})}" style="color: #cccccc">Выбор команд</a></li>
                 <li><a th:href="@{/event/member/{id}/teamTheme(id=${event.id})}" style="color: #cccccc">Выбор тем</a></li>
-                <li><a href="" style="color: #cccccc">Задания</a></li>
+                <li><a th:href="@{/event/member/{id}/kanban(id=${event.id})}" style="color: #cccccc">Задания</a></li>
             </ul>
         </ul>
         <form class="form-inline ml-auto mt-2 mt-md-0" th:action="@{/logout}" method="post">
