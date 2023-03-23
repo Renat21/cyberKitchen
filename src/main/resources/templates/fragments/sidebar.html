@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Thymeleaf Fragments: Боковая панель</title>
+</head>
+
+
+<body>
+
+<nav th:fragment="member" id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+  <div class="position-sticky">
+    <div class="list-group list-group-flush mx-3 mt-4">
+      <a th:href="@{/event/member/{id}/teamProfile(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+        <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Выбор команд</span>
+      </a>
+
+      <a th:href="@{/event/member/{id}/teamTheme(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple active">
+        <i class="fas fa-chart-area fa-fw me-3"></i><span>Выбор тем</span>
+      </a>
+
+      <a th:href="@{/event/member/{id}/kanban(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+        <i class="fas fa-lock fa-fw me-3"></i><span>Задания</span>
+      </a>
+
+      <a href="" class="list-group-item list-group-item-action py-2 ripple">
+        <form class="form-inline ml-auto mt-2 mt-md-0" th:action="@{/logout}" method="post">
+          <input
+              type="submit"
+              class="btn btn-warning"
+              value="Выйти (как лох)"
+          >
+        </form>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<nav th:fragment="organizer" id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+  <div class="position-sticky">
+    <div class="list-group list-group-flush mx-3 mt-4">
+      <a th:href="@{/event/organizer/{id}/profile(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+        <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Профиль события</span>
+      </a>
+
+      <a th:href="@{/event/organizer/{id}/themes(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple active">
+        <i class="fas fa-chart-area fa-fw me-3"></i><span>Темы конкурса</span>
+      </a>
+
+      <a th:href="@{/event/organizer/{id}/teams(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+        <i class="fas fa-lock fa-fw me-3"></i><span>Команды</span>
+      </a>
+
+      <a th:href="@{/event/organizer/{id}/members(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+        <i class="fas fa-lock fa-fw me-3"></i><span>Участники</span>
+      </a>
+
+      <a th:href="@{/event/organizer/{id}/experts(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+        <i class="fas fa-lock fa-fw me-3"></i><span>Эксперты</span>
+      </a>
+
+      <a th:href="@{/event/organizer/{id}/tasks(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+        <i class="fas fa-lock fa-fw me-3"></i><span>Задания</span>
+      </a>
+
+      <a href="" class="list-group-item list-group-item-action py-2 ripple">
+        <form class="form-inline ml-auto mt-2 mt-md-0" th:action="@{/logout}" method="post">
+          <input
+              type="submit"
+              class="btn btn-warning"
+              value="Выйти (как лох)"
+          >
+        </form>
+      </a>
+    </div>
+  </div>
+</nav>
+
+</body>
+
+</html>

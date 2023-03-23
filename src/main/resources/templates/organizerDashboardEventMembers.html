@@ -1,44 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="/css/memberDashboardTeamProfile.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <title>CyberKitchen</title>
+    <link rel="stylesheet" href="/css/memberDashboardTeamProfile.css">
+    <link rel="stylesheet" href="/css/memberDashboardTeamProfile.css">
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/trumbowyg/trumbowyg.min.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="#">Sidebar Nav</a>
-    <button
-            class="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarCollapse"
-            aria-controls="navbarCollapse"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-    >
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto sidenav" id="navAccordion">
-            <ul class="metro">
-                <li><a th:href="@{/event/organizer/{id}/profile(id=${event.id})}" style="color: #cccccc">Профиль события</a></li>
-                <li><a th:href="@{/event/organizer/{id}/themes(id=${event.id})}" style="color: #cccccc">Темы конкурса</a></li>
-                <li><a th:href="@{/event/organizer/{id}/teams(id=${event.id})}" style="color: #cccccc">Команды</a></li>
-                <li><a th:href="@{/event/organizer/{id}/members(id=${event.id})}" style="color: #cccccc">Участники</a></li>
-                <li><a th:href="@{/event/organizer/{id}/experts(id=${event.id})}" style="color: #cccccc">Эксперты</a></li>
-                <li><a th:href="@{/event/organizer/{id}/tasks(id=${event.id})}" style="color: #cccccc">Задания</a></li>
-            </ul>
-        </ul>
-        <form class="form-inline ml-auto mt-2 mt-md-0" th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
-    </div>
-</nav>
+<header th:insert="fragments/sidebar :: organizer"></header>
 
 <main class="content-wrapper">
     <div class="container-fluid">
@@ -75,6 +47,11 @@
 
     </div>
 </main>
+
+<script src="/js/jquery/jquery-3.6.4.min.js"></script>
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<script src="/js/trumbowyg/trumbowyg.min.js"></script>
+<script src="/js/dashboard.js"></script>
 
 </body>
 </html>
