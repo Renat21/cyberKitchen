@@ -23,9 +23,6 @@ public class Task {
     @JsonFormat(pattern="dd/MM/yyyy HH:mm")
     private LocalDateTime startDate;
 
-    @JsonFormat(pattern="dd/MM/yyyy HH:mm")
-    private LocalDateTime endDate;
-
     private Long maxScore;
 
     private String name;

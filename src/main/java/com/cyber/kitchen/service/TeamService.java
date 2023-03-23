@@ -31,11 +31,12 @@ public class TeamService {
         Event event = userService.findUsersCurrentEvent(user);
         EventRole eventRole = userService.getEventRole(role);
         Member member = memberRepository.findMemberByUser(user);
+        Team team = teamRepository.findTeamById(teamId);
 
         member.setRole(eventRole);
+        member.setTeamName(team.getName());
         memberRepository.save(member);
 
-        Team team = teamRepository.findTeamById(teamId);
 
         team.getMembers().add(member);
         teamRepository.save(team);

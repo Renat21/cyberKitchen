@@ -3,13 +3,11 @@ package com.cyber.kitchen.controller;
 
 import com.cyber.kitchen.entity.Event;
 import com.cyber.kitchen.entity.Team;
+import com.cyber.kitchen.entity.Theme;
 import com.cyber.kitchen.entity.User;
 import com.cyber.kitchen.repository.EventRepository;
 import com.cyber.kitchen.repository.UserRepository;
-import com.cyber.kitchen.service.EventService;
-import com.cyber.kitchen.service.MemberService;
-import com.cyber.kitchen.service.TeamService;
-import com.cyber.kitchen.service.UserService;
+import com.cyber.kitchen.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -35,6 +33,9 @@ public class MemberController {
     @Autowired
     TeamService teamService;
 
+    @Autowired
+    ThemeService themeService;
+
     @PostMapping("/memberEntrance")
     public String enterEvent(@AuthenticationPrincipal User user, @ModelAttribute(name = "token") String token){
         return memberService.memberEntranceEvent(user, token);
@@ -43,7 +44,7 @@ public class MemberController {
 
     @GetMapping("/{eventId}/teamProfile")
     public String getEventForMember(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
-        return eventService.enterToEventMember(user, eventId, model);
+        return eventService.enterToEventMember(user, eventId, model, 1);
     }
 
     @PostMapping("/enterTeam")
@@ -80,4 +81,31 @@ public class MemberController {
     public String exitFromTeam(@AuthenticationPrincipal User user, RedirectAttributes redirectAttributes){
         return memberService.exitFromTeam(user,  redirectAttributes);
     }
+
+    @GetMapping("/{eventId}/teamTheme")
+    public String getEventForMemberTheme(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
+        return eventService.enterToEventMember(user, eventId, model, 2);
+    }
+
+    @PostMapping("/getTheme/{themeId}")
+    @ResponseBody
+    public Theme getTheme(@AuthenticationPrincipal User user, @PathVariable Long themeId){
+        return themeService.getThemeById(themeId);
+    }
+
+    @PostMapping("/selectTheme/{themeId}")
+    public String selectTheme(@AuthenticationPrincipal User user, @PathVariable Long themeId){
+        return themeService.selectTheme(user, themeId);
+    }
+
+
+    @GetMapping("/{eventId}/kanban")
+    public String getEventForMemberKanban(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
+        return eventService.enterToEventMember(user, eventId, model, 3);
+    }
+
+//    @GetMapping("/{eventId}/teamProfile/teamTheme")
+//    public String getEventForMember(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
+//        return eventService.enterToEventMember(user, eventId, model);
+//    }
 }

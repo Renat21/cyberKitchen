@@ -2,5 +2,5 @@ package com.cyber.kitchen.enumer;
 
 
 public enum State{
-    STARTED, ENDED;
+    NOT_STARTED, IN_PROGRESS, REVIEW, CLOSED;
 }

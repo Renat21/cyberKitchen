@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>CyberKitchen</title>
+    <link rel="stylesheet" href="/css/memberDashboardTeamProfile.css">
+    <link rel="stylesheet" href="/css/memberDashboardTeamProfile.css">
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/trumbowyg/trumbowyg.min.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+
+<header th:insert="fragments/sidebar :: organizer"></header>
+
+<main class="content-wrapper">
+    <div class="container-fluid">
+        <div style="width: 95%;">
+            <div class="container">
+                <h2>Команды</h2>
+                <p>Информация о командах:</p>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Тема</th>
+                                <th>Лидер</th>
+                                <th>Участники</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="team : ${event.teams}">
+                                <td th:text="${team.name}"></td>
+                                <td th:if="${team.theme != null}" th:text="${team.theme.name}"></td>
+                                <td th:if="${team.theme == null}">Тема не выбрана</td>
+                                <td th:text="${team.leader.user.username}"></td>
+                                <td th:text="${team.members.size()}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script src="/js/jquery/jquery-3.6.4.min.js"></script>
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<script src="/js/trumbowyg/trumbowyg.min.js"></script>
+<script src="/js/dashboard.js"></script>
+
+</body>
+</html>

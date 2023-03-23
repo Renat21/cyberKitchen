@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>CyberKitchen</title>
+    <link rel="stylesheet" href="/css/memberDashboardTeamProfile.css">
+    <link rel="stylesheet" href="/css/memberDashboardTeamTheme.css">
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/trumbowyg/trumbowyg.min.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+
+<header th:insert="fragments/sidebar :: member"></header>
+
+<main class="content-wrapper">
+    <div class="container-fluid">
+        <div style="width: 95%;">
+
+            <div class="container">
+                <h2>Темы</h2>
+                <p>Выбор тем: </p>
+                <div class="row">
+                    <div class="col-lg-5">
+                        <ol class="list-counter-circle">
+                            <li class="currentTheme" th:each="theme: ${event.themes}" th:text="${theme.name}" th:id="${theme.id}"></li>
+                        </ol>
+                    </div>
+                    <form id="themeForm" method="post" class="col-lg-5 list-group">
+
+                        <p th:if="${themeIsSelected != true}" class="list-group-item">Описание выбранной темы: </p>
+
+                        <p th:if="${themeIsSelected == true}"  class="list-group-item" style="color: #059105">Тема выбрана</p>
+
+                        <span th:if="${themeIsSelected != true}" class="list-group-item" id="name">
+                            Название
+                        </span>
+
+                        <span th:if="${themeIsSelected == true}" class="list-group-item" th:text="${team.theme.name}">
+                        </span>
+
+                        <span th:if="${themeIsSelected != true}" class="list-group-item" id="description">
+                            Описание
+                        </span>
+
+                        <span th:if="${themeIsSelected == true}" class="list-group-item" th:text="${team.theme.description}">
+                        </span>
+
+                        <button th:if="${member.id == team.leader.id && themeIsSelected != true}" type="submit" class="btn btn-info">Определить тему</button>
+
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<script src="/js/jquery/jquery-3.6.4.min.js"></script>
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<script src="/js/trumbowyg/trumbowyg.min.js"></script>
+<script src="/js/dashboard.js"></script>
+<script th:if="${themeIsSelected != true}" src="/js/memberDashboardTeamTheme.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>CyberKitchen</title>
+    <link rel="stylesheet" href="/css/memberDashboardTeamProfile.css">
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/trumbowyg/trumbowyg.min.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+
+<header th:insert="fragments/sidebar :: organizer"></header>
+
+<main class="content-wrapper">
+    <div class="container-fluid">
+        <div style="width: 95%;">
+            <div class="container">
+                <h2>Эксперты</h2>
+                <p>Информация об экспертах:</p>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Логин</th>
+                                <th>Email</th>
+                                <th>Имя</th>
+                                <th>Фамилия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="expert : ${event.experts}">
+                                <td th:text="${expert.username}"></td>
+                                <td th:text="${expert.email}"></td>
+                                <td th:text="${expert.name}"></td>
+                                <td th:text="${expert.surname}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script src="/js/jquery/jquery-3.6.4.min.js"></script>
+<script src="/js/bootstrap/bootstrap.min.js"></script>
+<script src="/js/trumbowyg/trumbowyg.min.js"></script>
+<script src="/js/dashboard.js"></script>
+
+</body>
+</html>
