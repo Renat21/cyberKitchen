@@ -129,3 +129,8 @@ main {
   background-color: #194693;
   border-color: #194693;
 }
+
+.trumbowyg-box,
+.trumbowyg-editor {
+  min-height: 100px !important;
+}

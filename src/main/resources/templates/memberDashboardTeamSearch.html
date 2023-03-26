@@ -9,7 +9,33 @@
 </head>
 <body>
 
-<header th:insert="fragments/sidebar :: member"></header>
+<nav id="sidebarMenu" class="d-lg-block sidebar bg-white">
+    <div class="position-sticky">
+        <div class="list-group list-group-flush mx-3 mt-4">
+            <a th:href="@{/event/member/{id}/teamProfile(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple active">
+                <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Выбор команд</span>
+            </a>
+
+            <a th:href="@{/event/member/{id}/teamTheme(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+                <i class="fas fa-chart-area fa-fw me-3"></i><span>Выбор тем</span>
+            </a>
+
+            <a th:href="@{/event/member/{id}/kanban(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+                <i class="fas fa-lock fa-fw me-3"></i><span>Задания</span>
+            </a>
+
+            <a class="list-group-item list-group-item-action py-2 ripple">
+                <form class="form-inline ml-auto mt-2 mt-md-0" th:action="@{/logout}" method="post">
+                    <input
+                        type="submit"
+                        class="btn btn-warning"
+                        value="Выйти"
+                    >
+                </form>
+            </a>
+        </div>
+    </div>
+</nav>
 
 <main class="content-wrapper">
     <div class="container-fluid">

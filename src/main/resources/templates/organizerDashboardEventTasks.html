@@ -11,7 +11,45 @@
 </head>
 <body>
 
-<header th:insert="fragments/sidebar :: organizer"></header>
+<nav id="sidebarMenu" class="d-lg-block sidebar bg-white">
+    <div class="position-sticky">
+        <div class="list-group list-group-flush mx-3 mt-4">
+            <a th:href="@{/event/organizer/{id}/profile(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+                <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Профиль события</span>
+            </a>
+
+            <a th:href="@{/event/organizer/{id}/themes(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+                <i class="fas fa-chart-area fa-fw me-3"></i><span>Темы</span>
+            </a>
+
+            <a th:href="@{/event/organizer/{id}/teams(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+                <i class="fas fa-lock fa-fw me-3"></i><span>Команды</span>
+            </a>
+
+            <a th:href="@{/event/organizer/{id}/members(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+                <i class="fas fa-lock fa-fw me-3"></i><span>Участники</span>
+            </a>
+
+            <a th:href="@{/event/organizer/{id}/experts(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple">
+                <i class="fas fa-lock fa-fw me-3"></i><span>Эксперты</span>
+            </a>
+
+            <a th:href="@{/event/organizer/{id}/tasks(id=${event.id})}" class="list-group-item list-group-item-action py-2 ripple active">
+                <i class="fas fa-lock fa-fw me-3"></i><span>Задания</span>
+            </a>
+
+            <a href="" class="list-group-item list-group-item-action py-2 ripple">
+                <form class="form-inline ml-auto mt-2 mt-md-0" th:action="@{/logout}" method="post">
+                    <input
+                        type="submit"
+                        class="btn btn-warning"
+                        value="Выйти"
+                    >
+                </form>
+            </a>
+        </div>
+    </div>
+</nav>
 
 <main class="content-wrapper">
     <div class="container-fluid">
@@ -32,7 +70,7 @@
                             </tr>
                             </thead>
                             <tbody id="tableTasks">
-                            <tr class="tasks" data-toggle="modal" data-target="#updateCheckpoint" th:each="task: ${taskList}" th:id="${task.id}">
+                            <tr class="tasks" data-bs-toggle="modal" data-bs-target="#updateCheckpoint" th:each="task: ${taskList}" th:id="${task.id}">
                                 <td th:text="${task.numeration}" class="index value"></td>
                                 <td th:text="${task.name}" class="value"></td>
                                 <td th:text="${task.description}" class="value"></td>
@@ -46,7 +84,7 @@
                         <button type="button" class="btn btn-info" id="defineNumeration">Сохранить нумерацию</button>
                     </div>
                     <div class="col-sm-3" style="padding-left: 20px">
-                        <button data-toggle="modal" class="btn btn-success" data-target="#exampleModal">Добавить чекпоинт</button>
+                        <button data-bs-toggle="modal" class="btn btn-success" data-bs-target="#exampleModal">Добавить чекпоинт</button>
                     </div>
                 </div>
             </div>
@@ -59,9 +97,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Создать чекпоинт</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form th:action="@{/event/organizer/createTask}" method="post" th:object="${task}">
@@ -97,9 +133,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalL">Изменить чекпоинт</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="changeForm" method="post" th:object="${task}">
@@ -127,12 +161,6 @@
         </div>
     </div>
 </div>
-
-<script >
-    $('#exampleModal').on('show.bs.modal', function (event) {
-    })
-</script>
-
 
 <script src="/js/jquery/jquery-3.6.4.min.js"></script>
 <script src="/js/bootstrap/bootstrap.min.js"></script>
