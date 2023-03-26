@@ -1,10 +1,7 @@
 package com.cyber.kitchen.controller;
 
 
-import com.cyber.kitchen.entity.Event;
-import com.cyber.kitchen.entity.Team;
-import com.cyber.kitchen.entity.Theme;
-import com.cyber.kitchen.entity.User;
+import com.cyber.kitchen.entity.*;
 import com.cyber.kitchen.repository.EventRepository;
 import com.cyber.kitchen.repository.UserRepository;
 import com.cyber.kitchen.service.*;
@@ -23,7 +20,6 @@ import java.util.Map;
 public class MemberController {
     @Autowired
     EventService eventService;
-//cbed9856-00ac-425d-be1c-67640dbcdd86
     @Autowired
     MemberService memberService;
 
@@ -102,6 +98,12 @@ public class MemberController {
     @GetMapping("/{eventId}/kanban")
     public String getEventForMemberKanban(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
         return eventService.enterToEventMember(user, eventId, model, 3);
+    }
+
+    @GetMapping("/getKanbanBoard")
+    @ResponseBody
+    public List<Solution> getKanbanBoard(@AuthenticationPrincipal User user){
+        return memberService.getKanbanBoard(user);
     }
 
 //    @GetMapping("/{eventId}/teamProfile/teamTheme")

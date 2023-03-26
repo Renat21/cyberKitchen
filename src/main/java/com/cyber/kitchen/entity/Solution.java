@@ -29,7 +29,4 @@ public class Solution {
     private State state;
 
     private Long curScore;
-
-    @OneToMany
-    private List<Document> documents;
 }

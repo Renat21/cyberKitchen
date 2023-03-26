@@ -1,10 +1,7 @@
 package com.cyber.kitchen.service;
 
 
-import com.cyber.kitchen.entity.Event;
-import com.cyber.kitchen.entity.Member;
-import com.cyber.kitchen.entity.Team;
-import com.cyber.kitchen.entity.User;
+import com.cyber.kitchen.entity.*;
 import com.cyber.kitchen.enumer.EventRole;
 import com.cyber.kitchen.enumer.Role;
 import com.cyber.kitchen.repository.EventRepository;
@@ -17,9 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +37,9 @@ public class MemberService {
 
     @Autowired
     TeamService teamService;
+
+    @Autowired
+    SolutionService solutionService;
 
     public String memberEntranceEvent(User user, String token){
         Event event = eventService.findEventByMemberToken(token);
@@ -143,6 +141,14 @@ public class MemberService {
 
         // 3 места в команде
         else return event.getMaxMembersInTeam() > memberSInTeam + 2;
+    }
+    
+    public List<Solution> getKanbanBoard(User user){
+        Team team = teamRepository.findTeamById(teamRepository.findTeamByMember(memberRepository.findMemberByUser(user).getId()));
+        if (team == null)
+            return null;
+        
+        return solutionService.getSolutionsByTeam(team);
     }
 
 

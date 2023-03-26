@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table
 @Getter
@@ -21,4 +23,7 @@ public class Message {
     private User user;
 
     private String data;
+
+    @OneToMany
+    private List<Document> documents;
 }
