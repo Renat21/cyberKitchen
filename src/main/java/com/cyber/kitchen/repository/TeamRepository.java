@@ -1,6 +1,7 @@
 package com.cyber.kitchen.repository;
 
 
+import com.cyber.kitchen.entity.Event;
 import com.cyber.kitchen.entity.Member;
 import com.cyber.kitchen.entity.Team;
 import com.cyber.kitchen.entity.User;
@@ -20,5 +21,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
             """, nativeQuery = true)
     Long findTeamByMember(Long member);
 
-    List<Team> findTeamsByExpert(User user);
+    @Query(value = "select t.id from jpa.team as t, jpa.event_teams as ev where t.expert_id = ?1 and ev.teams_id = t.id and ev.event_id = ?2", nativeQuery = true)
+    List<Long> findTeamsByExpert(Long user, Long event);
 }

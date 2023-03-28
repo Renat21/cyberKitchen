@@ -16,7 +16,7 @@ public class Message {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = Solution.class, fetch = FetchType.EAGER)
     private Solution solution;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)

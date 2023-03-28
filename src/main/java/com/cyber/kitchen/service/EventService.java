@@ -99,7 +99,6 @@ public class EventService {
                 if (LocalDateTime.now().isAfter(event.getStartDate()) && team != null && team.getTheme() != null) {
                     model.addAttribute("team", team);
                     model.addAttribute("tasks", event.getTaskList().stream().sorted(Comparator.comparing(Task::getNumeration)).collect(Collectors.toList()));
-                    model.addAttribute("solutions", solutionService.getSolutionsByTeam(team));
                     return "memberDashboardEventKanban";
                 }else {
                     return "redirect:/event/member/" + event.getId() + "/teamProfile";
@@ -144,6 +143,8 @@ public class EventService {
 
         if (event.getExperts().contains(user)){
             model.addAttribute("event", event);
+            model.addAttribute("tasks", event.getTaskList().stream().sorted(Comparator.comparing(Task::getNumeration)).collect(Collectors.toList()));
+            model.addAttribute("teams", teamRepository.findTeamsByExpert(user.getId(), event.getId()).stream().map(i -> teamRepository.findTeamById(i)).collect(Collectors.toList()));
             return "expertDashboardEventKanban";
         }
         return "error404";

@@ -37,6 +37,6 @@ public class Team {
     private List<Member> members = new ArrayList<>();
 
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     private User expert;
 }

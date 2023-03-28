@@ -4,6 +4,7 @@ package com.cyber.kitchen.service;
 import com.cyber.kitchen.entity.*;
 import com.cyber.kitchen.enumer.State;
 import com.cyber.kitchen.repository.EventRepository;
+import com.cyber.kitchen.repository.SolutionRepository;
 import com.cyber.kitchen.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class TaskService {
     EventService eventService;
 
     @Autowired
-    SolutionService solutionService;
+    SolutionRepository solutionRepository;
 
     @Autowired
     EventRepository eventRepository;
@@ -46,6 +47,7 @@ public class TaskService {
         task.setDescription(newTask.getDescription());
         task.setName(newTask.getName());
         task.setMaxScore(newTask.getMaxScore());
+        task.setStartDate(newTask.getStartDate());
         taskRepository.save(task);
 
         return "redirect:/event/organizer/" + event.getId() + "/tasks";
@@ -79,7 +81,7 @@ public class TaskService {
             eventRepository.save(event);
             taskRepository.delete(task);
 
-            updateNumeration(getAllTasksSorted(user));
+            updateNumeration(getAllTasksSortedByNumeration(user));
 
             return "redirect:/event/organizer/" + event.getId() + "/tasks";
         }
@@ -91,17 +93,14 @@ public class TaskService {
         return eventService.findEventOrganizer(organizer).getTaskList();
     }
 
-    public List<Task> getAllTasksSorted(User organizer){
+    public List<Task> getAllTasksSortedByNumeration(User organizer){
         return eventService.findEventOrganizer(organizer).getTaskList().stream().sorted(Comparator.comparing(Task::getNumeration)).collect(Collectors.toList());
     }
 
-
-    public void openTaskForTeam(Team team, Event event){
-        Solution solution = new Solution();
-        solution.setCurScore(0L);
-        solution.setTask(getAllTasksSorted(event.getOrganizer()).get(solutionService.getSolutionsByTeam(team).size()));
-        solution.setState(State.NOT_STARTED);
-        solution.setTeam(team);
-        solutionService.save(solution);
+    public List<Task> getAllTasksSortedByStartDate(User organizer){
+        return eventService.findEventOrganizer(organizer).getTaskList().stream().sorted(Comparator.comparing(Task::getStartDate)).collect(Collectors.toList());
     }
+
+
+
 }

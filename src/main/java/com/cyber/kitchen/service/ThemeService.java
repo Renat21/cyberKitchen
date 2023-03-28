@@ -84,7 +84,7 @@ public class ThemeService {
             teamRepository.save(team);
 
             expertService.selectExpertFreeForTeam(event, team);
-            taskService.openTaskForTeam(team, event);
+
             return "redirect:/event/member/" + event.getId() + "/teamTheme";
         }
         return "error404";

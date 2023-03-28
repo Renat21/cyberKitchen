@@ -32,6 +32,9 @@ public class MemberController {
     @Autowired
     ThemeService themeService;
 
+    @Autowired
+    SolutionService solutionService;
+
     @PostMapping("/memberEntrance")
     public String enterEvent(@AuthenticationPrincipal User user, @ModelAttribute(name = "token") String token){
         return memberService.memberEntranceEvent(user, token);
@@ -106,6 +109,18 @@ public class MemberController {
         return memberService.getKanbanBoard(user);
     }
 
+    @GetMapping("/getSolution/{id}")
+    @ResponseBody
+    public Map<String, Object> getSolutionById(@PathVariable Long id){
+        return memberService.getSolution(id);
+    }
+
+
+    @PostMapping("/sendMessage")
+    @ResponseBody
+    public Message sendMessage(@AuthenticationPrincipal User user, @RequestBody Map<String, String> json){
+        return solutionService.sendSolutionForCheck(user, Long.parseLong(json.get("id")), json.get("data"));
+    }
 //    @GetMapping("/{eventId}/teamProfile/teamTheme")
 //    public String getEventForMember(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){
 //        return eventService.enterToEventMember(user, eventId, model);

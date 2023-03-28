@@ -1,18 +1,38 @@
 let currentLocation = document.location.protocol + "//" + document.location.host;
 let currentSolution = 0
+let teams
 let solutionsKanban = document.querySelector("#solutionsKanban")
 let messagesModalWindow = document.querySelector("#messagesModalWindow")
+let teamNames = document.querySelector("#teamNames")
+let task_status = document.querySelector("#task_status")
+let task_score = document.querySelector("#scoreSolution")
+
 document.querySelector("#sendMessageButton").addEventListener('click', function (){
     sendMessageAjax()
 })
+
+document.querySelector("#changeTeam").addEventListener('click', function (){
+    refreshTeamsKanban(teamNames.value)
+})
+
+document.querySelector("#saveStatus").addEventListener('click', function (){
+    let value = task_status.value
+    let score = task_score.value
+    createAjaxQueryWithData("/event/expert/setStatus/" + currentSolution, refreshAfterState, {state: value, curScore: score})
+})
+
+function refreshAfterState(){
+    refreshTeamsKanban(teamNames.value)
+}
 
 
 function sendMessageAjax(){
     let text = document.querySelector("#feedback").value
     document.querySelector("#feedback").innerHTML = ""
-    createAjaxQueryWithData("/event/member/sendMessage", addMessageToList,
+    createAjaxQueryWithData("/event/expert/sendMessage", addMessageToList,
         {data: text, id: currentSolution})
-    refreshKanban()
+
+    refreshTeamsKanban(teamNames.value)
 }
 
 
@@ -29,10 +49,12 @@ function addMessageToList(message){
         "                </div>"
     messagesModalWindow.appendChild(div)
 
+
     messagesModalWindow.scrollTop = messagesModalWindow.scrollHeight;
 }
 
 function updateModalWindow(data){
+    console.log(data)
     document.querySelector("#modal-title").innerHTML = data["solution"]["task"]["name"]
     document.querySelector("#modal-description").innerHTML = data["solution"]["task"]["description"]
 
@@ -40,8 +62,6 @@ function updateModalWindow(data){
         addMessageToList(data["messages"][i])
     }
 
-
-    document.querySelector("#task-status").innerHTML = data["solution"]["state"]
     currentSolution = data["solution"]["id"]
 
 }
@@ -102,24 +122,35 @@ function addKanbanItem(solution){
             break;
         }
     }
-
 }
 
 
 $(
     function (){
-        refreshKanban()
+        getAllTeams()
     }
 )
 
-function refreshKanban(){
+function setTeams(data){
+    teams = data
+    if (data.length > 0) {
+        refreshTeamsKanban(data[0]["id"])
+    }
+}
+
+
+function getAllTeams(){
+    createAjaxQuery("/event/expert/getTeams", setTeams)
+}
+
+function refreshTeamsKanban(id){
     solutionsKanban.innerHTML = "<tr>\n" +
         "        <td></td>\n" +
         "        <td></td>\n" +
         "        <td></td>\n" +
         "        <td></td>\n" +
         "      </tr>"
-    createAjaxQuery("/event/member/getKanbanBoard", setRefreshedKanban)
+    createAjaxQuery("/event/expert/getTeamKanban/" + id, setRefreshedKanban)
 }
 
 

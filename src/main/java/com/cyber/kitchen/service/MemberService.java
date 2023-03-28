@@ -148,8 +148,15 @@ public class MemberService {
         if (team == null)
             return null;
         
-        return solutionService.getSolutionsByTeam(team);
+        return solutionService.getSolutionsByTeam(user, team);
     }
 
+    public Map<String, Object> getSolution(Long id){
+        Map<String, Object> objects = new HashMap<>();
+
+        objects.put("solution", solutionService.getSolutionById(id));
+        objects.put("messages",solutionService.getAllMessagesBySolution(id));
+        return objects;
+    }
 
 }

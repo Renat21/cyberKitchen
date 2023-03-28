@@ -87,12 +87,6 @@
       </thead>
 
       <tbody id="solutionsKanban">
-      <tr>
-        <td></td>
-        <td></td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-      </tr>
       </tbody>
     </table>
   </div>
@@ -109,92 +103,33 @@
 
       <div class="modal-body row">
         <div class="col-7 modal-info">
-          <p>Super Idol de xiaorong. Dou mei ni de tian. Ba yue zhengwu de yangguang. Dou mei ni yaoyan. Re'ai 105 °C de ni. Di di qingchun de zhengliushui. Zai zhe duyiwu'er. Shuyu wo de shidai. Mo wangle chuxin chang zai. Tongkuai qu re'ai. Re'ai 105°C de ni. Di di qingchun de zhengliushui</p>
+          <p id="modal-description">Super Idol de xiaorong. Dou mei ni de tian. Ba yue zhengwu de yangguang. Dou mei ni yaoyan. Re'ai 105 °C de ni. Di di qingchun de zhengliushui. Zai zhe duyiwu'er. Shuyu wo de shidai. Mo wangle chuxin chang zai. Tongkuai qu re'ai. Re'ai 105°C de ni. Di di qingchun de zhengliushui</p>
 
           <div class="task-feedback">
-            <div class="task-comment-section mb-3 overflow-auto" style="height: 270px">
-              <div class="comment border rounded p-2 mb-3">
-                <header class="comment-header border-bottom pb-2 mb-2">
-                  <h6 class="mb-0">Ezh1k</h6>
-                  <i>Разработчик</i>
-                </header>
+            <div class="task-comment-section mb-3 overflow-auto" id="messagesModalWindow" style="height: 270px">
 
-                <div class="comment-body">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </div>
-              </div>
-
-              <div class="comment border rounded p-2 mb-3">
-                <header class="comment-header border-bottom pb-2 mb-2">
-                  <h6 class="mb-0">Super Idol</h6>
-                  <i>Командир роты</i>
-                </header>
-
-                <div class="comment-body">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </div>
-              </div>
-
-              <div class="comment border rounded p-2 mb-3">
-                <header class="comment-header border-bottom pb-2 mb-2">
-                  <h6 class="mb-0">Super Idol</h6>
-                  <i>Командир роты</i>
-                </header>
-
-                <div class="comment-body">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </div>
-              </div>
-
-              <div class="comment border rounded p-2 mb-3">
-                <header class="comment-header border-bottom pb-2 mb-2">
-                  <h6 class="mb-0">Super Idol</h6>
-                  <i>Командир роты</i>
-                </header>
-
-                <div class="comment-body">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </div>
-              </div>
-
-              <div class="comment border rounded p-2 mb-3">
-                <header class="comment-header border-bottom pb-2 mb-2">
-                  <h6 class="mb-0">Super Idol</h6>
-                  <i>Командир роты</i>
-                </header>
-
-                <div class="comment-body">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </div>
-              </div>
             </div>
 
-            <form>
+            <div id="sendMessageForm">
               <div class="mb-3">
-                <textarea name="feedback" id="feedback"></textarea>
+                <textarea name="data" id="feedback"></textarea>
               </div>
 
               <div class="mb-3">
-                <button class="btn btn-primary" type="submit" name="save-feedback">Comment</button>
+                <button class="btn btn-primary" id="sendMessageButton" name="save-feedback">Comment</button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
 
         <div class="col-5 modal-manager">
-          <form>
+          <div>
             <div class="mb-3 row align-items-center">
               <label for="task-status" class="col-4 col-form-label">Status:</label>
 
               <div class="col-8">
-                <select name="task-status" id="task-status" class="form-select">
-                  <option value="0" selected>NOT STARTED</option>
-                  <option value="1">IN PROGRESS</option>
-                  <option value="2">REVIEW</option>
-                  <option value="3">ON HOLD</option>
-                  <option value="4">CLOSED</option>
-                  <option value="6">CANCELLED</option>
-                </select>
+                    <div id="task-status"></div>
+
               </div>
             </div>
 
@@ -213,11 +148,7 @@
                 <span>Not assigned</span>
               </div>
             </div>
-
-            <div class="mb-3 text-center">
-              <button class="btn btn-primary" name="save" type="submit">Save</button>
-            </div>
-          </form>
+          </div>
         </div>
       </div> <!-- ./modal-body -->
     </div> <!-- ./modal-content -->
