@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/memberDashboardTeamProfile.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <title>CyberKitchen</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#">Sidebar Nav</a>
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarCollapse"
+            aria-controls="navbarCollapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto sidenav" id="navAccordion">
+            <ul class="metro">
+                <li><a th:href="@{/event/organizer/{id}/profile(id=${event.id})}" style="color: #cccccc">Профиль события</a></li>
+                <li><a th:href="@{/event/organizer/{id}/themes(id=${event.id})}" style="color: #cccccc">Темы конкурса</a></li>
+                <li><a href="" style="color: #cccccc">Команды</a></li>
+                <li><a href="" style="color: #cccccc">Участники</a></li>
+                <li><a href="" style="color: #cccccc">Эксперты</a></li>
+                <li><a href="" style="color: #cccccc">Задания</a></li>
+            </ul>
+        </ul>
+        <form class="form-inline ml-auto mt-2 mt-md-0" th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
+</nav>
+
+<main class="content-wrapper">
+    <div class="container-fluid">
+        <div style="width: 80%;">
+            <div class="col-md-8">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Event name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${event.name}" ></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Количество экспертов</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${event.experts.size()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Количество участников</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${event.members.size()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Количество команд</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${event.teams.size()}"></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Member token</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${event.memberToken}"></p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Expert token</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:text="${event.expertToken}"></p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Даты события</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p th:inline="text">[[${event.startDate}]] - [[${event.endDate}]]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+</body>
+</html>

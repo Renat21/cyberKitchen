@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/css/memberDashboardTeamProfile.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <title>CyberKitchen</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#">Sidebar Nav</a>
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarCollapse"
+            aria-controls="navbarCollapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto sidenav" id="navAccordion">
+            <ul class="metro">
+                <li><a th:href="@{/event/organizer/{id}/profile(id=${event.id})}" style="color: #cccccc">Профиль события</a></li>
+                <li><a th:href="@{/event/organizer/{id}/themes(id=${event.id})}" style="color: #cccccc">Темы конкурса</a></li>
+                <li><a href="" style="color: #cccccc">Команды</a></li>
+                <li><a href="" style="color: #cccccc">Участники</a></li>
+                <li><a href="" style="color: #cccccc">Эксперты</a></li>
+                <li><a href="" style="color: #cccccc">Задания</a></li>
+            </ul>
+        </ul>
+        <form class="form-inline ml-auto mt-2 mt-md-0" th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
+</nav>
+
+<main class="content-wrapper">
+    <div class="container-fluid">
+        <div style="width: 80%;">
+            <div class="container">
+                <h2>Темы конкурса</h2>
+                <p>Информация о темах:</p>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Описание</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="theme : ${event.themes}">
+                        <td th:text="${theme.name}"></td>
+                        <td th:text="${theme.description}"></td>
+                        <td>Удалить</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <button data-toggle="modal" data-target="#exampleModal">Добавить тему</button>
+
+    </div>
+</main>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/event/organizer/createTheme}" method="post" th:object="${theme}">
+                    <div class="form-group">
+                        <label for="name" class="col-form-label">Название темы:</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description" class="col-form-label">Описание:</label>
+                        <textarea class="form-control" name="description" id="description"></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Создать тему</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script >
+    $('#exampleModal').on('show.bs.modal', function (event) {
+    })
+</script>
+
+</body>
+</html>
