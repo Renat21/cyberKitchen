@@ -6,6 +6,7 @@ import com.cyber.kitchen.repository.DocumentRepository;
 import com.cyber.kitchen.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,8 +32,7 @@ public class DocumentService {
     public List<Long> saveDocuments(List<MultipartFile> files) {
         return files.stream().map(file -> {
             try {
-                Document document = new Document(file.getName(), file.getOriginalFilename(),
-                        file.getSize(), file.getContentType(), file.getBytes());
+                Document document = toDocumentEntity(file);
                 documentRepository.save(document);
                 return document.getId();
             } catch (IOException e) {
@@ -43,6 +43,12 @@ public class DocumentService {
 
     public Document findDocumentById(Long id){
         return documentRepository.findDocumentById(id);
+    }
+
+
+    @Transactional
+    public void save(Document document){
+        documentRepository.save(document);
     }
 
 }

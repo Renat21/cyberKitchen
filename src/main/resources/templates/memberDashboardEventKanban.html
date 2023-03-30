@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
   <link rel="stylesheet" href="/css/trumbowyg/trumbowyg.min.css">
   <link rel="stylesheet" href="/css/dashboard.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
 
@@ -117,6 +118,11 @@
 
               <div class="mb-3">
                 <button class="btn btn-primary" id="sendMessageButton" name="save-feedback">Comment</button>
+                <label class="btn btn-default">
+                  <div class="add-tooltip" data-original-title="Add Photo" data-toggle="tooltip">
+                    <span class="fa fa-paperclip"></span></div>
+                  <input type="file" id="documentList" name="documentList" multiple hidden>
+                </label>
               </div>
             </div>
           </div>
@@ -134,18 +140,9 @@
             </div>
 
             <div class="mb-3 row align-items-center">
-              <label class="col-4 col-form-label">Action required:</label>
-
+              <label class="col-4 col-form-label">Текущие баллы:</label>
               <div class="col-8">
-                <span>No action required</span>
-              </div>
-            </div>
-
-            <div class="mb-3 row align-items-center">
-              <label class="col-4 col-form-label">Assigned to:</label>
-
-              <div class="col-8">
-                <span>Not assigned</span>
+                <p id="curScore"></p>
               </div>
             </div>
           </div>

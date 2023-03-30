@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -118,8 +120,11 @@ public class MemberController {
 
     @PostMapping("/sendMessage")
     @ResponseBody
-    public Message sendMessage(@AuthenticationPrincipal User user, @RequestBody Map<String, String> json){
-        return solutionService.sendSolutionForCheck(user, Long.parseLong(json.get("id")), json.get("data"));
+    public Message sendMessage(@AuthenticationPrincipal User user, @RequestBody Map<String, Object> json){
+        return solutionService.sendSolutionForCheck(user,
+                Long.parseLong(json.get("id").toString()),
+                json.get("data").toString(),
+                (ArrayList) json.get("documents"));
     }
 //    @GetMapping("/{eventId}/teamProfile/teamTheme")
 //    public String getEventForMember(@AuthenticationPrincipal User user, @PathVariable Long eventId, Model model){

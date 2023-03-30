@@ -4,6 +4,7 @@ package com.cyber.kitchen.service;
 import com.cyber.kitchen.entity.*;
 import com.cyber.kitchen.enumer.EventRole;
 import com.cyber.kitchen.enumer.Role;
+import com.cyber.kitchen.repository.AchievementRepository;
 import com.cyber.kitchen.repository.EventRepository;
 import com.cyber.kitchen.repository.MemberRepository;
 import com.cyber.kitchen.repository.TeamRepository;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +41,9 @@ public class EventService {
     @Autowired
     SolutionService solutionService;
 
+    @Autowired
+    AchievementRepository achievementRepository;
+
 
     public String createEvent(User user, Event event, RedirectAttributes redirectAttributes){
         if (!user.getRoles().contains(Role.ORGANIZER))
@@ -62,14 +67,15 @@ public class EventService {
         if (event == null)
             return "error404";
 
-        if (!event.getRunning())
-            return "error404";
-
 
         if (getUsersFromMembers(event.getMembers()).contains(user)){
             Team team = getUsersTeamByEvent(event, user);
             model.addAttribute("event", event);
             model.addAttribute("member", memberRepository.findMemberByUser(user));
+
+
+            if (event.getEndDate().isBefore(LocalDateTime.now()))
+                return getEndTemplate(event, model);
 
             if (checkTeamForFits(event, memberRepository.findMemberByUser(user))){
                 return "redirect:/";
@@ -98,7 +104,7 @@ public class EventService {
             }else if (page == 3){
                 if (LocalDateTime.now().isAfter(event.getStartDate()) && team != null && team.getTheme() != null) {
                     model.addAttribute("team", team);
-                    model.addAttribute("tasks", event.getTaskList().stream().sorted(Comparator.comparing(Task::getNumeration)).collect(Collectors.toList()));
+                    model.addAttribute("tasks", event.getTaskList().stream().sorted(Comparator.comparing(Task::getStartDate)).collect(Collectors.toList()));
                     return "memberDashboardEventKanban";
                 }else {
                     return "redirect:/event/member/" + event.getId() + "/teamProfile";
@@ -107,6 +113,34 @@ public class EventService {
 
         }
         return "error404";
+    }
+
+
+    public String getEndTemplate(Event event, Model model){
+        List<Team> teams = new ArrayList<>(event.getTeams().stream().sorted(Comparator.comparing((i) -> (solutionService.getTeamScore(event, i)))).toList());
+        Collections.reverse(teams);
+
+        if (event.getRunning()){
+            endTheEvent(event, teams);
+        }
+
+        model.addAttribute("teams", teams);
+        model.addAttribute("scores", solutionService.getTeamsScores(event, teams));
+        return "DashboardEventEnding";
+    }
+
+    public void endTheEvent(Event event, List<Team> teams){
+
+        for (Member member: event.getMembers()){
+            Achievement achievement = new Achievement();
+            achievement.setUser(member.getUser());
+            achievement.setEvent(event);
+            achievement.setName("Заняли " + teams.indexOf(teamRepository.findTeamById(teamRepository.findTeamByMember(member.getId()))));
+            achievementRepository.save(achievement);
+        }
+
+        event.setRunning(false);
+        eventRepository.save(event);
     }
 
     public Boolean checkTeamForFits(Event event, Member member){
@@ -138,12 +172,12 @@ public class EventService {
         if (event == null)
             return "error404";
 
-        if (!event.getRunning())
-            return "error404";
-
         if (event.getExperts().contains(user)){
+            if (event.getEndDate().isBefore(LocalDateTime.now()))
+                return getEndTemplate(event, model);
+
             model.addAttribute("event", event);
-            model.addAttribute("tasks", event.getTaskList().stream().sorted(Comparator.comparing(Task::getNumeration)).collect(Collectors.toList()));
+            model.addAttribute("tasks", event.getTaskList().stream().sorted(Comparator.comparing(Task::getStartDate)).collect(Collectors.toList()));
             model.addAttribute("teams", teamRepository.findTeamsByExpert(user.getId(), event.getId()).stream().map(i -> teamRepository.findTeamById(i)).collect(Collectors.toList()));
             return "expertDashboardEventKanban";
         }
@@ -157,14 +191,15 @@ public class EventService {
         if (event == null)
             return "error404";
 
-        if (!event.getRunning())
-            return "error404";
 
-        if (event.getOrganizer().equals(user)){
+        if (event.getOrganizer().equals(user)) {
+
             model.addAttribute("event", event);
-            model.addAttribute("taskList", event.getTaskList().stream().sorted(Comparator.comparing(Task::getNumeration)).collect(Collectors.toList()));
-            if (page == 1)
+            model.addAttribute("DateTimeFormatter", DateTimeFormatter.class);
+            model.addAttribute("taskList", event.getTaskList().stream().sorted(Comparator.comparing(Task::getStartDate)).collect(Collectors.toList()));
+            if (page == 1) {
                 return "organizerDashboardEventProfile";
+            }
             else if (page == 2) {
                 return "organizerDashboardEventThemes";
             }
@@ -178,6 +213,10 @@ public class EventService {
                 return "organizerDashboardEventExperts";
             }
             else if (page == 6) {
+                List<Team> teams = new ArrayList<>(event.getTeams().stream().sorted(Comparator.comparing((i) -> (solutionService.getTeamScore(event, i)))).toList());
+                Collections.reverse(teams);
+                model.addAttribute("teams", teams);
+                model.addAttribute("scores", solutionService.getTeamsScores(event, teams));
                 return "organizerDashboardEventTeams";
             }
         }

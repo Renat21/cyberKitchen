@@ -8,7 +8,7 @@ let task_status = document.querySelector("#task_status")
 let task_score = document.querySelector("#scoreSolution")
 
 document.querySelector("#sendMessageButton").addEventListener('click', function (){
-    sendMessageAjax()
+    sendMessage()
 })
 
 document.querySelector("#changeTeam").addEventListener('click', function (){
@@ -17,46 +17,125 @@ document.querySelector("#changeTeam").addEventListener('click', function (){
 
 document.querySelector("#saveStatus").addEventListener('click', function (){
     let value = task_status.value
-    let score = task_score.value
+    let score = task_score.value === "" ? "-1": task_score.value
     createAjaxQueryWithData("/event/expert/setStatus/" + currentSolution, refreshAfterState, {state: value, curScore: score})
 })
 
-function refreshAfterState(){
+function refreshAfterState(score){
     refreshTeamsKanban(teamNames.value)
+    document.querySelector("#curScore").innerHTML =  score
 }
 
 
-function sendMessageAjax(){
+// SENDING MESSAGE WITH DOCS
+
+async function createDocument(documents) {
+    var request = {};
+    let elem;
+    request.documents = documents; // some data
+
+    let formData = new FormData();
+    for (let i = 0; i < documents.length; i++) {
+        formData.append("file", documents[i]);
+    }
+    const response = await fetch(currentLocation + "/document/create", {
+        method: "POST",
+        body: formData,
+    }).then((data) => {
+        elem = data.json();
+    })
+    return elem
+}
+
+
+
+async function sendMessage() {
+
+    var documentValue
+    let documents = document.querySelector("#documentList").files
+    console.log(documents)
+    if (documents.length !== 0) {
+        let documentConverted = createDocument(documents)
+        await documentConverted.then(async function (value) {
+            documentValue = value
+        })
+    }
+
     let text = document.querySelector("#feedback").value
-    document.querySelector("#feedback").innerHTML = ""
-    createAjaxQueryWithData("/event/expert/sendMessage", addMessageToList,
-        {data: text, id: currentSolution})
+    const message = {
+        id: currentSolution,
+        data: text,
+        documents: documentValue != null ? documentValue : null
+    }
 
-    refreshTeamsKanban(teamNames.value)
+
+    createAjaxQueryWithData("/event/expert/sendMessage", addMessageToList, message)
+
+    document.querySelector("#documentList").value = ''
+    document.querySelector("#feedback").innerHTML = ""
 }
+
+
+
+
 
 
 function addMessageToList(message){
-    let div = document.createElement("div")
-    div.classList.add("comment", "border", "rounded", "p-2", "mb-3")
-    div.innerHTML = "   <header class=\"comment-header border-bottom pb-2 mb-2\">\n" +
+    let mess = document.createElement("div")
+    mess.classList.add("comment", "border", "rounded", "p-2", "mb-3")
+    mess.innerHTML = "   <header class=\"comment-header border-bottom pb-2 mb-2\">\n" +
         "                  <h6 class=\"mb-0\">" + message["user"]["username"] + "</h6>\n" +
         "                  <i>Разработчик</i>\n" +
         "                </header>\n" +
         "\n" +
         "                <div class=\"comment-body\">\n"
         + message["data"] +
-        "                </div>"
-    messagesModalWindow.appendChild(div)
+        "                   <div class=\"attachment-mail\">\n" +
+        "                        <p>\n" +
+        "                            <a>All attachments</a>\n" +
+        "                        </p>\n" +
+        "                        <div id=\"attachmentsDocuments" + message["id"] + "\" class=\"attachments\">\n" +
+        "                        </div>\n" +
+        "                    </div>" +
+        "               </div>  "
 
+
+    messagesModalWindow.appendChild(mess)
+
+    let attachmentsDocuments = messagesModalWindow.querySelector("#attachmentsDocuments" + message["id"])
+
+    let extension;
+    let fileName;
+    let div;
+    for (let i = 0; i < message["documents"].length; i++) {
+        let source = message["documents"][i] != null ? '/image/' + message["documents"][i]["id"] : 'https://bootdey.com/img/Content/avatar/avatar1.png';
+        extension = message["documents"][i]["originalFileName"].split(".")[1]
+        fileName = message["documents"][i]["originalFileName"].length <= 13 ? message["documents"][i]["originalFileName"] : message["documents"][i]["originalFileName"].slice(0, 13) + ".."
+
+
+        div = document.createElement('div')
+        div.classList.add("attachment")
+
+        div.innerHTML = "<span class=\"badge\">" + extension + "</span> <a href=\"" + source + "\" download=\"" + message["documents"][i]["originalFileName"] + "\">" + fileName + "</a> <i>(" + (message["documents"][i]["size"] / 1024 / 1024).toFixed(2) + "MB)</i>"
+        let attachFile = div.querySelector(".badge")
+
+        if (extension === "pdf" || extension === "docx" || extension === "txt")
+            attachFile.style.backgroundColor = "#17a2b8"
+        else if (extension === "xls")
+            attachFile.style.backgroundColor = "#28a745"
+        else
+            attachFile.style.backgroundColor = "#dc3545"
+        attachmentsDocuments.appendChild(div)
+    }
 
     messagesModalWindow.scrollTop = messagesModalWindow.scrollHeight;
+
 }
 
 function updateModalWindow(data){
-    console.log(data)
     document.querySelector("#modal-title").innerHTML = data["solution"]["task"]["name"]
     document.querySelector("#modal-description").innerHTML = data["solution"]["task"]["description"]
+    document.querySelector("#curScore").innerHTML =  data["solution"]["curScore"]
 
     for (let i = 0; i < data["messages"].length; i++) {
         addMessageToList(data["messages"][i])
@@ -99,7 +178,7 @@ function getColorByStatus(state){
 }
 
 
-function addKanbanItem(solution){
+function addKanbanItem(solution, numeration){
     let last = false
     for (let i = 0; i < solutionsKanban.children.length; i++) {
         if (solutionsKanban.children[i].children[getColumnIdByStatus(solution.state)].innerHTML === "") {
@@ -114,7 +193,7 @@ function addKanbanItem(solution){
 
         if (last) {
             solutionsKanban.children[i].children[getColumnIdByStatus(solution.state)].innerHTML = "<div id='solution" + solution.id + "' class=\"card border " + getColorByStatus(solution.state) + " dashboard-task\" data-bs-toggle=\"modal\" data-bs-target=\"#task-data\">\n" +
-                "            <div class=\"card-body task-title\">Task " + solution.task.numeration + "    Score: " + solution.curScore + "</div>\n" +
+                "            <div class=\"card-body task-title\">Task " + numeration + "    Score: " + solution.curScore + "</div>\n" +
                 "          </div>"
             document.querySelector("#solution" + solution.id).addEventListener("click", function () {
                 getSolutionById(solution.id)
@@ -156,7 +235,7 @@ function refreshTeamsKanban(id){
 
 function setRefreshedKanban(data){
     for (let i = 0; i < data.length ; i++) {
-        addKanbanItem(data[i])
+        addKanbanItem(data[i], i + 1)
     }
 }
 

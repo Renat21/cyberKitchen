@@ -74,7 +74,7 @@
                                 <td th:text="${member.user.username}"></td>
                                 <td th:text="${member.user.email}"></td>
                                 <td th:text="${member.role}"></td>
-                                <td th:text="${member.entranceDate}"></td>
+                                <td th:text="${member.entranceDate.format(DateTimeFormatter.ofPattern('yyyy/MM/dd HH:mm'))}"></td>
                             </tr>
                             </tbody>
                         </table>

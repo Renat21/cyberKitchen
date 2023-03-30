@@ -27,7 +27,5 @@ public class Task {
 
     private String name;
 
-    private Long numeration;
-
     private Boolean open = Boolean.FALSE;
 }

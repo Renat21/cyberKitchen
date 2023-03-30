@@ -4,16 +4,16 @@ package com.cyber.kitchen.service;
 import com.cyber.kitchen.entity.*;
 import com.cyber.kitchen.enumer.Role;
 import com.cyber.kitchen.enumer.State;
-import com.cyber.kitchen.repository.EventRepository;
-import com.cyber.kitchen.repository.MessageRepository;
-import com.cyber.kitchen.repository.SolutionRepository;
-import com.cyber.kitchen.repository.TaskRepository;
+import com.cyber.kitchen.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class SolutionService {
@@ -26,8 +26,20 @@ public class SolutionService {
     @Autowired
     UserService userService;
 
+    @Autowired
+    DocumentRepository documentRepository;
+
     public List<Solution> getSolutionsByTeam(User user, Team team){
         List<Task> taskList = userService.findUsersCurrentEvent(user).getTaskList();
+        for (Task task: taskList){
+            if (LocalDateTime.now().isAfter(task.getStartDate()))
+                openTaskForTeam(team, task);
+        }
+        return solutionRepository.findSolutionsByTeam(team);
+    }
+
+    public List<Solution> getSolutionsByTeam(Event event, Team team){
+        List<Task> taskList = event.getTaskList();
         for (Task task: taskList){
             if (LocalDateTime.now().isAfter(task.getStartDate()))
                 openTaskForTeam(team, task);
@@ -55,7 +67,7 @@ public class SolutionService {
         }
     }
 
-    public Message sendSolutionForCheck(User user, Long solutionId, String data){
+    public Message sendSolutionForCheck(User user, Long solutionId, String data, List<Number> filesId){
         Solution solution = solutionRepository.findSolutionById(solutionId);
 
         Message message = new Message();
@@ -63,9 +75,20 @@ public class SolutionService {
         message.setUser(user);
         message.setSolution(solution);
 
+        List<Document> documents = new ArrayList<>();
+
+        if (filesId != null) {
+            for (Number fileId : filesId) {
+                documents.add(documentRepository.findDocumentById(fileId.longValue()));
+            }
+        }
+        message.setDocuments(documents);
+
+
+
         messageRepository.save(message);
 
-        if (!user.getRoles().contains(Role.EXPERT)) {
+        if (!user.getRoles().contains(Role.EXPERT) && !solution.getState().equals(State.CLOSED)) {
             solution.setState(State.REVIEW);
             solutionRepository.save(solution);
         }
@@ -90,19 +113,30 @@ public class SolutionService {
         return State.NOT_STARTED;
     }
 
-    public String setSolutionState(Long solutionId, String state, Long curScore){
+    public Long setSolutionState(Long solutionId, String state, Long curScore){
         Solution solution = solutionRepository.findSolutionById(solutionId);
 
         solution.setState(getSolutionState(state));
-        solution.setCurScore(curScore);
+
+        if (curScore > 0)
+            solution.setCurScore(curScore);
 
         solutionRepository.save(solution);
 
-        return "success";
+        return solution.getCurScore();
     }
 
     public Solution getSolutionById(Long id){
         return solutionRepository.findSolutionById(id);
+    }
+
+    public Long getTeamScore(Event event, Team team){
+        List<Solution> solutions = getSolutionsByTeam(event, team);
+        return solutions.stream().mapToLong(Solution::getCurScore).sum();
+    }
+
+    public Map<Long, Long> getTeamsScores(Event event, List<Team> teams){
+        return teams.stream().collect(Collectors.toMap(Team::getId, value -> getTeamScore(event, value)));
     }
 
 

@@ -26,6 +26,13 @@ $("tbody").sortable({
     update: function() {}
 });
 
+function updateTasksNumeration(data){
+    for (let i = 0; i < data.length; i++){
+        let task = document.querySelector("#task_" + data[i]["id"])
+        task.querySelector(".startDate").innerHTML = data[i]["startDate"]
+    }
+}
+
 document.querySelector("#defineNumeration").addEventListener('click' , function (){
     defineNumeration()
 }, true)
@@ -34,19 +41,10 @@ document.querySelector("#defineNumeration").addEventListener('click' , function 
 function defineNumeration(){
     let numeration = {}
     for (let i = 0; i < tableTasks.children.length; i++) {
-        numeration[tableTasks.children[i].id] = i
+        numeration[tableTasks.children[i].id.split("_")[1]] = i
     }
 
-    createAjaxQueryWithData("/event/organizer/defineNumeration", redirect, numeration)
-}
-
-function redirect(data) {
-    // if (data) {
-    //     window.location.href = currentLocation + data;
-    // } else {
-    //     // data.form contains the HTML for the replacement form
-    //     // $("#myform").replaceWith(data.form);
-    // }
+    createAjaxQueryWithData("/event/organizer/defineNumeration", updateTasksNumeration, numeration)
 }
 
 function createAjaxQueryWithData(url, toFunction, request) {

@@ -111,7 +111,8 @@
                                 <label>Даты события</label>
                             </div>
                             <div class="col-md-6">
-                                <p th:inline="text">[[${event.startDate}]] - [[${event.endDate}]]</p>
+                                <p th:text="${event.startDate.format(DateTimeFormatter.ofPattern('yyyy/MM/dd HH:mm'))
+                                + ' - ' + event.endDate.format(DateTimeFormatter.ofPattern('yyyy/MM/dd HH:mm'))}"></p>
                             </div>
                         </div>
                     </div>

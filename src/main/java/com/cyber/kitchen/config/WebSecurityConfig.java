@@ -1,8 +1,11 @@
 package com.cyber.kitchen.config;
 
 import com.cyber.kitchen.enumer.Role;
+import com.cyber.kitchen.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -22,6 +25,10 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Lazy
+    @Autowired
+    UserService userService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -38,6 +45,15 @@ public class WebSecurityConfig {
                 )
                 .logout((logout) -> logout.permitAll())
                 .csrf().disable();
+
+        http.
+                logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID").permitAll();
+
+        http.rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400).userDetailsService(userService);
+
 
         return http.build();
     }

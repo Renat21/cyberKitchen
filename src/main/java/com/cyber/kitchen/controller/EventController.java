@@ -77,7 +77,7 @@ public class EventController {
 
     @PostMapping("/defineNumeration")
     @ResponseBody
-    public String defineNumerationTasks(@AuthenticationPrincipal User user,
+    public List<Task> defineNumerationTasks(@AuthenticationPrincipal User user,
                                             @RequestBody Map<Long, Long> numeration){
         return taskService.changeNumerations(user, numeration);
     }

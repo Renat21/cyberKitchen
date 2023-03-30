@@ -4,6 +4,7 @@ import com.cyber.kitchen.entity.Event;
 import com.cyber.kitchen.entity.User;
 import com.cyber.kitchen.enumer.EventRole;
 import com.cyber.kitchen.enumer.Role;
+import com.cyber.kitchen.repository.AchievementRepository;
 import com.cyber.kitchen.repository.EventRepository;
 import com.cyber.kitchen.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
@@ -40,6 +42,10 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    AchievementRepository achievementRepository;
+
     public void saveUser(User user){
         userRepository.save(user);
     }
@@ -96,6 +102,12 @@ public class UserService implements UserDetailsService {
 
     public Event findExpertsCurrentEvent(User user){
         return eventRepository.findEventById(userRepository.findExpertsCurrentEvent(user.getId()));
+    }
+
+    public String getMembersProfile(User user, Model model){
+        model.addAttribute("user", user);
+        model.addAttribute("achievements", achievementRepository.findAchievementsByUser(user));
+        return "membersProfile";
     }
 
     public Event findUsersEvents(User user){

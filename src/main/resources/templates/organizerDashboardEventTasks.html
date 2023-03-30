@@ -70,12 +70,12 @@
                             </tr>
                             </thead>
                             <tbody id="tableTasks">
-                            <tr class="tasks" data-bs-toggle="modal" data-bs-target="#updateCheckpoint" th:each="task: ${taskList}" th:id="${task.id}">
-                                <td th:text="${task.numeration}" class="index value"></td>
+                            <tr class="tasks" data-bs-toggle="modal" data-bs-target="#updateCheckpoint" th:each="task: ${taskList}" th:id="'task_' + ${task.id}">
+                                <td th:text="${taskList.indexOf(task) + 1}" class="index value"></td>
                                 <td th:text="${task.name}" class="value"></td>
                                 <td th:text="${task.description}" class="value"></td>
                                 <td th:text="${task.maxScore}" class="value"></td>
-                                <td th:text="${task.startDate}" class="value"></td>
+                                <td th:text="${task.startDate.format(DateTimeFormatter.ofPattern('yyyy/MM/dd HH:mm'))}" class="value startDate"></td>
                                 <td>
                                     <a th:href="@{/event/organizer/deleteTask/{id}(id=${task.id})}">Удалить</a>
                                 </td>

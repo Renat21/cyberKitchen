@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,13 +51,16 @@ public class ExpertController {
 
     @PostMapping("/sendMessage")
     @ResponseBody
-    public Message sendMessage(@AuthenticationPrincipal User user, @RequestBody Map<String, String> json){
-        return solutionService.sendSolutionForCheck(user, Long.parseLong(json.get("id")), json.get("data"));
+    public Message sendMessage(@AuthenticationPrincipal User user, @RequestBody Map<String, Object> json){
+        return solutionService.sendSolutionForCheck(user,
+                Long.parseLong(json.get("id").toString()),
+                json.get("data").toString(),
+                (ArrayList) json.get("documents"));
     }
 
     @PostMapping("/setStatus/{solutionId}")
     @ResponseBody
-    public String setStatus(@PathVariable Long solutionId, @RequestBody Map<String, String> json){
+    public Long setStatus(@PathVariable Long solutionId, @RequestBody Map<String, String> json){
         return solutionService.setSolutionState(solutionId, json.get("state"), Long.parseLong(json.get("curScore")));
     }
 }

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="/css/trumbowyg/trumbowyg.min.css">
     <link rel="stylesheet" href="/css/dashboard.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
 
@@ -21,8 +22,8 @@
         <div class="list-group list-group-flush mx-3 mt-4">
             <div class="list-group-item">
                 <p>Выбрать команду</p>
-                <select th:each="team: ${teams}" name="task-status" id="teamNames" class="form-select mb-1">
-                    <option th:value="${team.id}" th:text="${team.name}"></option>
+                <select name="task-status" id="teamNames" class="form-select mb-1">
+                    <option th:each="team: ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
                 </select>
                 <div class="mb-3 text-center">
                     <button id="changeTeam" class="btn btn-primary">Выбрать</button>
@@ -118,6 +119,11 @@
 
                             <div class="mb-3">
                                 <button class="btn btn-primary" id="sendMessageButton" name="save-feedback">Comment</button>
+                                <label class="btn btn-default">
+                                    <div class="add-tooltip" data-original-title="Add Photo" data-toggle="tooltip">
+                                        <span class="fa fa-paperclip"></span></div>
+                                    <input type="file" id="documentList" name="documentList" multiple hidden>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -139,8 +145,14 @@
                         </div>
 
                         <div class="mb-3 row align-items-center">
-                            <label class="col-4 col-form-label">Баллы за задание:</label>
+                            <label class="col-4 col-form-label">Текущие баллы:</label>
+                            <div class="col-8">
+                                <p id="curScore"></p>
+                            </div>
+                        </div>
 
+                        <div class="mb-3 row align-items-center">
+                            <label class="col-4 col-form-label">Баллы за задание:</label>
                             <div class="col-8">
                                 <input id="scoreSolution"/>
                             </div>
