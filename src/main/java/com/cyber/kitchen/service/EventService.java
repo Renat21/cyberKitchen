@@ -71,13 +71,13 @@ public class EventService {
         if (getUsersFromMembers(event.getMembers()).contains(user)){
             Team team = getUsersTeamByEvent(event, user);
             model.addAttribute("event", event);
-            model.addAttribute("member", memberRepository.findMemberByUser(user));
+            model.addAttribute("member", userService.findMemberByUserAndEvent(user, event));
 
 
             if (event.getEndDate().isBefore(LocalDateTime.now()))
                 return getEndTemplate(event, model);
 
-            if (checkTeamForFits(event, memberRepository.findMemberByUser(user))){
+            if (checkTeamForFits(event, userService.findMemberByUserAndEvent(user, event))){
                 return "redirect:/";
             }
 
@@ -243,7 +243,7 @@ public class EventService {
     }
 
     public Team getUsersTeamByEvent(Event event, User user){
-        Member member = memberRepository.findMemberByUser(user);
+        Member member = userService.findMemberByUserAndEvent(user, event);
         for (Team team: event.getTeams())
             if (team.getMembers().contains(member))
                 return team;
@@ -275,7 +275,7 @@ public class EventService {
     public String createTeam(User user, Team team, String role, RedirectAttributes redirectAttributes){
         user = userService.findUserById(user.getId());
         Event event = userService.findUsersCurrentEvent(user);
-        Member member = memberRepository.findMemberByUser(user);
+        Member member = userService.findMemberByUserAndEvent(user, event);
 
         member.setRole(userService.getEventRole(role));
         teamRepository.save(team);

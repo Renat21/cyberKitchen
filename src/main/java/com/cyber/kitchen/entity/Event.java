@@ -39,7 +39,7 @@ public class Event {
 
     private Long maxMembersInTeam;
 
-    @OneToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<User> experts = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.MERGE)

@@ -1,6 +1,7 @@
 package com.cyber.kitchen.service;
 
 import com.cyber.kitchen.entity.Event;
+import com.cyber.kitchen.entity.Member;
 import com.cyber.kitchen.entity.User;
 import com.cyber.kitchen.enumer.EventRole;
 import com.cyber.kitchen.enumer.Role;
@@ -112,33 +113,41 @@ public class UserService implements UserDetailsService {
     public String getMembersProfile(User user, Model model){
         model.addAttribute("user", user);
         model.addAttribute("achievements", achievementRepository.findAchievementsByUser(user));
-        model.addAttribute("memberService", memberRepository);
+        model.addAttribute("userService", this);
         model.addAttribute("DateTimeFormatter", DateTimeFormatter.class);
         return "membersProfile";
     }
 
-    public Event findUsersEvents(User user){
-        return eventRepository.findEventById(userRepository.findUsersEvents(user));
-    }
 
+    public String changeMembersProfile(User user, User newUser) {
 
-    public String changeProfile(RedirectAttributes redirectAttributes, User user,
-                                String username, String name, String surname) {
-
-        User newUser = userRepository.findByUsername(username);
-        if (userRepository.findByUsername(username) != null) {
-            redirectAttributes.addFlashAttribute("errorCurrentUsername", true);
-            return "redirect:/profile";
-        }
-        else
-            user.setUsername(username);
-
-        user.setName(name);
-        user.setSurname(surname);
-        redirectAttributes.addFlashAttribute("profileChanged", true);
+        user.setName(newUser.getName());
+        user.setAddress(newUser.getSurname());
+        user.setGit(newUser.getGit());
         saveUser(user);
-        return "redirect:/profile";
+        return "redirect:/profile/member";
     }
+
+    public String changeExpertsProfile(User user, User newUser) {
+
+        user.setName(newUser.getName());
+        user.setAddress(newUser.getSurname());
+        user.setGit(newUser.getGit());
+        saveUser(user);
+        return "redirect:/profile/expert";
+    }
+
+    public List<Event> getEventsByExpert(User user){
+        return eventRepository.findAll().stream().filter(i -> i.getExperts().stream().map(User::getId).toList().contains(user.getId())).toList();
+    }
+
+    public String getExpertsProfile(User user, Model model){
+        model.addAttribute("user", user);
+        model.addAttribute("events", getEventsByExpert(user));
+        model.addAttribute("DateTimeFormatter", DateTimeFormatter.class);
+        return "expertsProfile";
+    }
+
 
     public String changePassword(User user, String currentPassword, String newPassword,
                                  String passwordConfirm, RedirectAttributes redirectAttributes) {
@@ -178,6 +187,13 @@ public class UserService implements UserDetailsService {
     @Transactional
     public User findUserByUsername(String username){
         return userRepository.findByUsername(username);
+    }
+
+    public Member findMemberByUserAndEvent(User user, Event event){
+        for (Member cMember: event.getMembers())
+            if (cMember.getUser().getId().equals(user.getId()))
+                return cMember;
+        return null;
     }
 
     @Transactional

@@ -30,7 +30,7 @@ public class TeamService {
     public String enterToTeam(User user, Long teamId, String role){
         Event event = userService.findUsersCurrentEvent(user);
         EventRole eventRole = userService.getEventRole(role);
-        Member member = memberRepository.findMemberByUser(user);
+        Member member = userService.findMemberByUserAndEvent(user, event);
         Team team = teamRepository.findTeamById(teamId);
 
         member.setRole(eventRole);

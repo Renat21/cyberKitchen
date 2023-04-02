@@ -48,7 +48,7 @@
             </div>
             <div class="col-md-8">
                 <div class="card mb-3">
-                    <form class="card-body" th:action="@{/profile/member/change}" method="post" >
+                    <form class="card-body" th:action="@{/profile/expert/change}" method="post" >
                         <div class="row">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Username</h6>
@@ -107,32 +107,24 @@
                 <h5>События</h5>
 
                 <div class="row gutters-sm">
-                    <a th:each="achievement: ${achievements}" class="col-sm-6 mb-3" th:href="@{/event/member/{id}/teamProfile(id=${achievement.event.id})}">
+                    <a th:each="event: ${events}" class="col-sm-6 mb-3" th:href="@{/event/expert/{id}/kanban(id=${event.id})}">
                         <div class="card h-100">
                             <div class="card-body">
-                                <h6 class="d-flex align-items-center mb-3" th:text="'Название события: ' + ${achievement.event.name}"></h6>
+                                <h6 class="d-flex align-items-center mb-3" th:text="'Название события: ' + ${event.name}"></h6>
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <h6 class="mb-0">Дата проведения</h6>
                                     </div>
-                                    <div class="col-sm-6 text-secondary" th:text="${achievement.event.startDate.format(DateTimeFormatter.ofPattern('yyyy/MM/dd HH:mm'))
-                                + ' - ' + achievement.event.endDate.format(DateTimeFormatter.ofPattern('yyyy/MM/dd HH:mm'))}">
+                                    <div class="col-sm-6 text-secondary" th:text="${event.startDate.format(DateTimeFormatter.ofPattern('yyyy/MM/dd HH:mm'))
+                                + ' - ' + event.endDate.format(DateTimeFormatter.ofPattern('yyyy/MM/dd HH:mm'))}">
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <h6 class="mb-0">Достижение</h6>
+                                        <h6 class="mb-0">Количество команд</h6>
                                     </div>
-                                    <div class="col-sm-6 text-secondary" th:text="${achievement.name}">
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <h6 class="mb-0">Роль в команде</h6>
-                                    </div>
-                                    <div class="col-sm-6 text-secondary" th:text="${userService.findMemberByUserAndEvent(user, achievement.event).role}">
+                                    <div class="col-sm-6 text-secondary" th:text="${event.teams.size()}">
                                     </div>
                                 </div>
                             </div>

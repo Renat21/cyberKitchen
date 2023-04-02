@@ -66,7 +66,7 @@ public class MemberService {
 
     public String exitFromTeam(User user, RedirectAttributes redirectAttributes){
         Event event = userService.findUsersCurrentEvent(user);
-        Member member = memberRepository.findMemberByUser(user);
+        Member member = userService.findMemberByUserAndEvent(user, event);
         Team team = teamRepository.findTeamById(teamRepository.findTeamByMember(member.getId()));
         team.getMembers().remove(member);
 
@@ -91,7 +91,7 @@ public class MemberService {
 
     public String addToTeam(User user, String username, String role, RedirectAttributes redirectAttributes){
         Event event = userService.findUsersCurrentEvent(user);
-        Member member = memberRepository.findMemberByUser(user);
+        Member member = userService.findMemberByUserAndEvent(user, event);
         Team team = teamRepository.findTeamById(teamRepository.findTeamByMember(member.getId()));
         EventRole eventRole = userService.getEventRole(role);
 
@@ -101,7 +101,7 @@ public class MemberService {
             return "redirect:/event/member/" + event.getId() + "/teamProfile";
         }
 
-        Member memberToAdd = memberRepository.findMemberByUser(userToAdd);
+        Member memberToAdd = userService.findMemberByUserAndEvent(user, event);
         if (memberToAdd == null) {
             redirectAttributes.addFlashAttribute("errorEvent", true);
             return "redirect:/event/member/" + event.getId() + "/teamProfile";
@@ -144,7 +144,8 @@ public class MemberService {
     }
     
     public List<Solution> getKanbanBoard(User user){
-        Team team = teamRepository.findTeamById(teamRepository.findTeamByMember(memberRepository.findMemberByUser(user).getId()));
+        Event event = userService.findUsersCurrentEvent(user);
+        Team team = teamRepository.findTeamById(teamRepository.findTeamByMember(userService.findMemberByUserAndEvent(user, event).getId()));
         if (team == null)
             return null;
         

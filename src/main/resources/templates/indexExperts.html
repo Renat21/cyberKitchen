@@ -20,6 +20,11 @@
 <body>
 
 <div class="jumbotron text-center">
+
+    <a style="color: white" th:href="@{/profile/expert}">
+        <i class="fa fa-user fa-3x"></i>
+    </a>
+
     <form th:action="@{/logout}" method="post" class="flex justify-content-end">
         <button type="submit" style="background: none;color: inherit;border: none;padding: 0;font: inherit;cursor: pointer;outline: inherit;">
             <i class="fa fa-sign-out fa-3x"></i>
