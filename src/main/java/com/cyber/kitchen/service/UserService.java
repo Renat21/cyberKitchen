@@ -6,6 +6,7 @@ import com.cyber.kitchen.enumer.EventRole;
 import com.cyber.kitchen.enumer.Role;
 import com.cyber.kitchen.repository.AchievementRepository;
 import com.cyber.kitchen.repository.EventRepository;
+import com.cyber.kitchen.repository.MemberRepository;
 import com.cyber.kitchen.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +47,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     AchievementRepository achievementRepository;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     public void saveUser(User user){
         userRepository.save(user);
@@ -107,6 +112,8 @@ public class UserService implements UserDetailsService {
     public String getMembersProfile(User user, Model model){
         model.addAttribute("user", user);
         model.addAttribute("achievements", achievementRepository.findAchievementsByUser(user));
+        model.addAttribute("memberService", memberRepository);
+        model.addAttribute("DateTimeFormatter", DateTimeFormatter.class);
         return "membersProfile";
     }
 

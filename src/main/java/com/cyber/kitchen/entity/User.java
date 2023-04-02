@@ -34,6 +34,14 @@ public class User implements UserDetails {
     private String surname;
     private String password;
 
+    private String git = "https://github.com/";
+
+    private String address = "Bay Area, San Francisco, CA";
+
+    private String phone = "(320) 380-4539";
+
+    private String role = "Developer";
+
 //    @OneToOne(targetEntity = Image.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 //    @JoinColumn(name = "image_id", referencedColumnName = "id")
 //    @JsonIgnoreProperties(value = "bytes", allowSetters = true)

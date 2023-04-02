@@ -3,6 +3,9 @@ package com.cyber.kitchen.controller;
 import com.cyber.kitchen.entity.Document;
 import com.cyber.kitchen.repository.DocumentRepository;
 import com.cyber.kitchen.service.DocumentService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -16,6 +19,8 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class DocumentController {
 
     @Autowired

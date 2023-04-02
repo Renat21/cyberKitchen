@@ -15,3 +15,7 @@ body{
 #cover-caption {
     width: 100%;
 }
+
+a {
+    text-decoration: none;
+}
